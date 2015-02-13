@@ -1,0 +1,21 @@
+<input type="button" id="pvbtn" value="pvbtn" />
+<input type="button" id="nonpvbtn" value="nonpvbtn" />
+<script src="ubt.js"></script>
+<script>
+nonpvbtn.onclick = function() {
+  UBT.send('TEST', {x: Math.random()});
+};
+
+
+var i = 0;
+
+var pvUbt = UBT.bind('PV', {
+  i: function() {
+    return i++;
+  }
+});
+
+pvbtn.onclick = function() {
+  pvUbt.send();
+};
+</script>
