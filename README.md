@@ -2,7 +2,7 @@
 
 ### 接口描述
 
-``` 
+```js
 var typeubt = UBT.bindType(type);
 var dataubt = UBT.bindData(objs...);
 var sububt = UBT.bind([type, ] objs...);
@@ -12,7 +12,7 @@ UBT.send([type, ] objs...)
 
 ### 用法
 
-```
+```js
 // 记录一个 PV
 UBT.send('PV');
 
