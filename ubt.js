@@ -63,14 +63,17 @@ void function() {
       UBT.params.pvhash = unique();
     } else {
       base = NONPV_RECEIVER;
-    };
+    }
     // 将后续参数中的对象全部 extend 到 data 中
     for(var key in data) {
       var value = data[key];
       // 如果参数是一个函数则调用取结果，支持：.send({ name: func });
-      if(typeof value === 'function') data[key] = value();
-      // 消除继承
-      data[key] = data[key];
+      if(typeof value === 'function') {
+        data[key] = value();
+      } else {
+        // 消除原型引用
+        data[key] = data[key];
+      }
     }
     // 发送
     var queryString = encodeURIComponent(JSON.stringify(data));
