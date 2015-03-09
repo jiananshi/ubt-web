@@ -1,12 +1,8 @@
 <input type="button" id="pvbtn" value="pvbtn" />
 <input type="button" id="nonpvbtn" value="nonpvbtn" />
+<input type="button" id="error" value="error" />
 <script src="ubt.js"></script>
 <script>
-nonpvbtn.onclick = function() {
-  UBT.send('TEST', {x: Math.random()});
-};
-
-
 var i = 0;
 
 var pvUbt = UBT.bind('PV', {
@@ -15,7 +11,16 @@ var pvUbt = UBT.bind('PV', {
   }
 });
 
-pvbtn.onclick = function() {
+document.getElementById('pvbtn').onclick = function() {
   pvUbt.send();
 };
+
+document.getElementById('nonpvbtn').onclick = function() {
+  UBT.send('TEST', {x: Math.random()});
+};
+
+document.getElementById('error').onclick = function() {
+  throw new Error('This is a testing error');
+};
 </script>
+
