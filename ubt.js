@@ -104,10 +104,15 @@ void function() {
 
   // 兼容的事件绑定
   var on = function(element, type, handler) {
+    var wrapper = function(e) {
+      e = e || event;
+      e.target = e.target || e.srcElement;
+      handler.call(e.target, e);
+    };
     if(element.addEventListener) {
-      element.addEventListener(type, handler);
+      element.addEventListener(type, wrapper);
     } else if(element.attachEvent) {
-      element.attachEvent('on' + type, handler);
+      element.attachEvent('on' + type, wrapper);
     }
   };
 
@@ -183,8 +188,7 @@ void function() {
       UBT.send('EVENT', { name: name, action: 'click', message: compress(message) });
     };
     on(document, 'click', function(e) {
-      e = e || event;
-      var target = e.target || e.srcElement;
+      var target = e.target;
       // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
       while(target) {
         if(target.nodeType === 1 && target.hasAttribute(key)) sendByElement(target);
@@ -202,8 +206,7 @@ void function() {
     var key ='ubt-change';
     var installed = key + '-installed';
     var change = function(e, name) {
-      e = e || event;
-      var target = e.target || e.srcElement;
+      var target = e.target;
       var value = /^(?:radio|checkbox)$/i.test(target.type) ? target.checked : target.value;
       UBT.send('EVENT', { name: name, action: 'change', value: compress(value) });
     };
@@ -230,8 +233,7 @@ void function() {
       bindList(e.getElementsByTagName('select'), name);
     };
     var operate = function(e) {
-      e = e || event;
-      var target = e.target || e.srcElement;
+      var target = e.target;
       // 收集具有 ubt-change 属性的元素
       var items = [];
       while(target) {
