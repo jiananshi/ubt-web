@@ -194,22 +194,57 @@ void function() {
   }();
 
   // 监控值变化事件
+  // 逻辑：
+  // 点击后从点击的元素向上追朔获取带 ubt-change 属性的元素
+  // 如果追溯到 LABEL 元素则在 LABEL 的后代中也找带 ubt-change 属性的元素
+  // 取到带 ubt-change 属性的元素后将其自身和内部的所有控件注册上 change 事件
   void function() {
     var key ='ubt-change';
     var installed = key + '-installed';
+    var change = function(e, name) {
+      e = e || event;
+      var target = e.target || e.srcElement;
+      var value = /^(?:radio|checkbox)$/i.test(target.type) ? target.checked : target.value;
+      UBT.send('EVENT', { name: name, action: 'change', value: compress(value) });
+    };
+    var bindList = function(list, name) {
+      for(var i = 0; i < list.length; i++) {
+        on(list[i], 'change', function(e) {
+          change(e, name);
+        });
+      }
+    };
+    var getItemsFromLabel = function(label) {
+      var elements = label.getElementsByTagName('*');
+      var matched = [];
+      for(var i = 0; i < elements.length; i++) {
+        if(elements[i].hasAttribute(key)) matched.push(elements[i]);
+      }
+      return matched;
+    };
+    var install = function(e) {
+      var name = e.getAttribute(key);
+      on(e, 'change', function(e) { change(e, name); });
+      // 广播到后代
+      bindList(e.getElementsByTagName('input'), name);
+      bindList(e.getElementsByTagName('select'), name);
+    };
     var operate = function(e) {
       e = e || event;
       var target = e.target || e.srcElement;
-      if(target.nodeType !== 1 || !target.hasAttribute(key)) return;
-      if(target[installed]) return;
-      target[installed] = true;
-      var name = target.getAttribute(key);
-      on(target, 'change', function(e) {
-        e = e || event;
-        var target = e.target || e.srcElement;
-        var value = /^(?:radio|checkbox)$/i.test(target.type) ? target.checked : target.value;
-        UBT.send('EVENT', { name: name, action: 'change', value: compress(value) });
-      });
+      // 收集具有 ubt-change 属性的元素
+      var items = [];
+      while(target) {
+        if(target.tagName === 'LABEL') Array.prototype.push.apply(items, getItemsFromLabel(target));
+        if(target.nodeType === 1 && target.hasAttribute(key)) items.push(target);
+        target = target.parentNode;
+      }
+      // 处理这些元素
+      for(var i = 0; i < items.length; i++) {
+        if(items[i][installed]) continue;
+        install(items[i]);
+        items[i][installed] = true;
+      }
     };
     // 由于 change 不冒泡，所以需要由一个鼠标或键盘事件来引导
     on(document, 'mousedown', operate);
