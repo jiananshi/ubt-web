@@ -157,12 +157,18 @@ void function() {
     var onclick = function(e) {
       e = e || event;
       var target = e.target || e.srcElement;
+      // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
+      while(target) {
+        if(target.nodeType === 1 && target.hasAttribute('ubt-click')) sendByElement(target);
+        target = target.parentNode;
+      }
+    };
+    var sendByElement = function(target) {
       var name = target.getAttribute('ubt-click');
-      if(!name) return;
       // 尽可能地获取点击目标相关信息
       var message= target.textContent || target.innerText || target.value || target.title || target.alt || target.href;
       // 去除头尾空白字符，压缩中间连续空白字符
-      message.replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ');
+      message = message.replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ');
       // 将太长的字符串中间省略
       message = message.replace(/^(.{7})(.{7,})(.{7})$/, function($0, $1, $2, $3) {
         return $1 + '(' + $2.length + ')' + $3;
