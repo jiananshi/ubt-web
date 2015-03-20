@@ -175,8 +175,9 @@ void function() {
 
   // 监控点击事件
   void function() {
+    var key = 'ubt-click';
     var sendByElement = function(target) {
-      var name = target.getAttribute('ubt-click');
+      var name = target.getAttribute(key);
       // 尽可能地获取点击目标相关信息
       var message = target.textContent || target.innerText || target.value || target.title || target.alt || target.href;
       UBT.send('EVENT', { name: name, action: 'click', message: compress(message) });
@@ -186,7 +187,7 @@ void function() {
       var target = e.target || e.srcElement;
       // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
       while(target) {
-        if(target.nodeType === 1 && target.hasAttribute('ubt-click')) sendByElement(target);
+        if(target.nodeType === 1 && target.hasAttribute(key)) sendByElement(target);
         target = target.parentNode;
       }
     });
