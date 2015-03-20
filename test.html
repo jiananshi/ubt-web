@@ -3,11 +3,24 @@
 <input type="button" id="error" value="error" />
 <input type="button" id="ubt-click" ubt-click="hehe" value="ubt-click" />
 <hr/>
+
 <span ubt-click="a" style="padding:10px;background:#cfc;border:1px solid #ccc;display:inline-block;">
   <span ubt-click="b" style="padding:10px;background:#ffc;border:1px solid #ccc;display:inline-block;">
     <a href="JavaScript:" style="background:#ccf;display:inline-block;">ubt-click</a>
   </span>
 </span>
+<hr/>
+
+<div>
+  <input ubt-change="a" type="checkbox" />
+  <input ubt-change="b" name="r" type="radio" value="aa" />
+  <input ubt-change="c" name="r" type="radio" value="bb" />
+  <input ubt-change="d" type="input" />
+  <select ubt-change="e">
+    <option>item1</option>
+    <option>item2</option>
+  </select>
+</div>
 
 <script src="ubt.js"></script>
 <script>
