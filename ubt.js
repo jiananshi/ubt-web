@@ -205,16 +205,19 @@ void function() {
   void function() {
     var key ='ubt-change';
     var installed = key + '-installed';
-    var change = function(e, name) {
-      var target = e.target;
-      var value = /^(?:radio|checkbox)$/i.test(target.type) ? target.checked : target.value;
-      UBT.send('EVENT', { name: name, action: 'change', value: compress(value) });
+    var checkType = function(e) {
+      return /^(?:radio|checkbox)$/i.test(e.type);
+    };
+    var bind = function(e, name) {
+      on(e, checkType(e) ? 'click' : 'change', function(e) {
+        var target = e.target;
+        var value = checkType(target) ? target.checked : target.value;
+        UBT.send('EVENT', { name: name, action: 'change', value: compress(value) });
+      });
     };
     var bindList = function(list, name) {
       for(var i = 0; i < list.length; i++) {
-        on(list[i], 'change', function(e) {
-          change(e, name);
-        });
+        bind(list[i], name);
       }
     };
     var getItemsFromLabel = function(label) {
@@ -227,7 +230,7 @@ void function() {
     };
     var install = function(e) {
       var name = e.getAttribute(key);
-      on(e, 'change', function(e) { change(e, name); });
+      bind(e, name);
       // 广播到后代
       bindList(e.getElementsByTagName('input'), name);
       bindList(e.getElementsByTagName('select'), name);
