@@ -7,7 +7,7 @@ void function() {
 
   // 生成随机字符串的函数
   var unique = function() {
-    var s = ''; 
+    var s = '';
     for(var i = 0; i < 4; i++) {
       s += '0000000'.concat(Math.floor(Math.random() * 2821109907456).toString(36)).slice(-8);
     }
@@ -44,7 +44,7 @@ void function() {
     var args = Array.prototype.slice.call(arguments);
     var type = typeof args[0] === 'string' ? args.shift() : this.type;
     // 与当前的 params 合并
-    var data = this.bindData.apply(this, args).params; 
+    var data = this.bindData.apply(this, args).params;
     return new SubUBT(type, data);
   };
   // send 方法定义 .send(type, args...)
@@ -52,7 +52,7 @@ void function() {
     // 与当前的 params 合并
     var sububt = this.bind.apply(this, arguments);
     // 取出参数
-    var data = sububt.params; 
+    var data = sububt.params;
     // 添加 type
     var type = data.type = sububt.type;
     // 处理 type
@@ -79,7 +79,7 @@ void function() {
     var queryString = encodeURIComponent(JSON.stringify(data));
     new Image().src = base + '?' + queryString;
   };
-  
+
   // 初始化 UBT
   UBT = new SubUBT('DEFAULT', new function(){
     // 初始化 pvhash
@@ -87,7 +87,7 @@ void function() {
     // 初始化 ubt-ssid（种植第一方 Cookie）
     this.ssid = document.cookie.match(/(?:^|; )ubt_ssid=(.*?)(?:; |$)|$/)[1];
     if(!this.ssid) {
-      // 创建一个北京时间的日期字符串作为 ssid 的结尾（TODO: 客户端时间可能是不准确的） 
+      // 创建一个北京时间的日期字符串作为 ssid 的结尾（TODO: 客户端时间可能是不准确的）
       var t = new Date(Date.now() + 480 * 60000);
       this.ssid = unique() + '_' + [t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()].join('-').replace(/\b\d\b/g, '0$&');
       // 获取当前根域名
@@ -96,6 +96,27 @@ void function() {
       document.cookie = 'ubt_ssid=' + this.ssid + '; Expires=Wed, 31 Dec 2098 16:00:00 GMT; Domain=' + domain + '; Path=/';
     }
   });
+}();
+
+
+// 全局行为
+void function() {
+
+  // 兼容的事件绑定
+  var on = function(element, type, handler) {
+    if(element.addEventListener) {
+      element.addEventListener(type, handler);
+    } else if(element.attachEvent) {
+      element.attachEvent('on' + type, handler);
+    }
+  };
+
+  // 去除字符串头尾空白字符，压缩中间连续空白字符，并将太长的字符串中间部分省略
+  var compress = function(e) {
+    return String(e).replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ').replace(/^(.{7})(.{7,})(.{7})$/, function($0, $1, $2, $3) {
+      return $1 + '(' + $2.length + ')' + $3;
+    });
+  };
 
   // 记录 timing
   void function() {
@@ -154,32 +175,45 @@ void function() {
 
   // 监控点击事件
   void function() {
-    var onclick = function(e) {
+    var key = 'ubt-click';
+    var sendByElement = function(target) {
+      var name = target.getAttribute(key);
+      // 尽可能地获取点击目标相关信息
+      var message = target.textContent || target.innerText || target.value || target.title || target.alt || target.href;
+      UBT.send('EVENT', { name: name, action: 'click', message: compress(message) });
+    };
+    on(document, 'click', function(e) {
       e = e || event;
       var target = e.target || e.srcElement;
       // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
       while(target) {
-        if(target.nodeType === 1 && target.hasAttribute('ubt-click')) sendByElement(target);
+        if(target.nodeType === 1 && target.hasAttribute(key)) sendByElement(target);
         target = target.parentNode;
       }
-    };
-    var sendByElement = function(target) {
-      var name = target.getAttribute('ubt-click');
-      // 尽可能地获取点击目标相关信息
-      var message= target.textContent || target.innerText || target.value || target.title || target.alt || target.href;
-      // 去除头尾空白字符，压缩中间连续空白字符
-      message = message.replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ');
-      // 将太长的字符串中间省略
-      message = message.replace(/^(.{7})(.{7,})(.{7})$/, function($0, $1, $2, $3) {
-        return $1 + '(' + $2.length + ')' + $3;
+    });
+  }();
+
+  // 监控值变化事件
+  void function() {
+    var key ='ubt-change';
+    var installed = key + '-installed';
+    var operate = function(e) {
+      e = e || event;
+      var target = e.target || e.srcElement;
+      if(target.nodeType !== 1 || !target.hasAttribute(key)) return;
+      if(target[installed]) return;
+      target[installed] = true;
+      var name = target.getAttribute(key);
+      on(target, 'change', function(e) {
+        e = e || event;
+        var target = e.target || e.srcElement;
+        var value = /^(?:radio|checkbox)$/i.test(target.type) ? target.checked : target.value;
+        UBT.send('EVENT', { name: name, action: 'change', value: compress(value) });
       });
-      UBT.send('EVENT', { name: name, action: 'click', message: message });
     };
-    if(document.addEventListener) {
-      document.addEventListener('click', onclick);
-    } else if(document.attachEvent) {
-      document.attachEvent('onclick', onclick);
-    }
+    // 由于 change 不冒泡，所以需要由一个鼠标或键盘事件来引导
+    on(document, 'mousedown', operate);
+    on(document, 'keydown', operate);
   }();
 
 }();
