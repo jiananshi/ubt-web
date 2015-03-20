@@ -96,6 +96,18 @@ void function() {
       document.cookie = 'ubt_ssid=' + this.ssid + '; Expires=Wed, 31 Dec 2098 16:00:00 GMT; Domain=' + domain + '; Path=/';
     }
   });
+}();
+
+
+// 全局行为
+void function() {
+  var on = function(element, type, handler) {
+    if(element.addEventListener) {
+      element.addEventListener(type, handler);
+    } else if(element.attachEvent) {
+      element.attachEvent('on' + type, handler);
+    }
+  };
 
   // 记录 timing
   void function() {
@@ -154,15 +166,6 @@ void function() {
 
   // 监控点击事件
   void function() {
-    var onclick = function(e) {
-      e = e || event;
-      var target = e.target || e.srcElement;
-      // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
-      while(target) {
-        if(target.nodeType === 1 && target.hasAttribute('ubt-click')) sendByElement(target);
-        target = target.parentNode;
-      }
-    };
     var sendByElement = function(target) {
       var name = target.getAttribute('ubt-click');
       // 尽可能地获取点击目标相关信息
@@ -175,11 +178,15 @@ void function() {
       });
       UBT.send('EVENT', { name: name, action: 'click', message: message });
     };
-    if(document.addEventListener) {
-      document.addEventListener('click', onclick);
-    } else if(document.attachEvent) {
-      document.attachEvent('onclick', onclick);
-    }
+    on(document, 'click', function(e) {
+      e = e || event;
+      var target = e.target || e.srcElement;
+      // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
+      while(target) {
+        if(target.nodeType === 1 && target.hasAttribute('ubt-click')) sendByElement(target);
+        target = target.parentNode;
+      }
+    });
   }();
 
 }();
