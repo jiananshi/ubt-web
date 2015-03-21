@@ -209,7 +209,7 @@ void function() {
       return /^(?:radio|checkbox)$/i.test(e.type);
     };
     var bind = function(e, name) {
-      on(e, checkType(e) ? 'click' : 'change', function(e) {
+      on(e, 'change', function(e) {
         var target = e.target;
         var value = checkType(target) ? target.checked : target.value;
         UBT.send('EVENT', { name: name, action: 'change', value: compress(value) });
