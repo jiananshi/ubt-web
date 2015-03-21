@@ -88,7 +88,7 @@ void function() {
     this.ssid = document.cookie.match(/(?:^|; )ubt_ssid=(.*?)(?:; |$)|$/)[1];
     if(!this.ssid) {
       // 创建一个北京时间的日期字符串作为 ssid 的结尾（TODO: 客户端时间可能是不准确的）
-      var t = new Date(Date.now() + 480 * 60000);
+      var t = new Date(new Date().getTime() + 480 * 60000);
       this.ssid = unique() + '_' + [t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()].join('-').replace(/\b\d\b/g, '0$&');
       // 获取当前根域名
       var domain = document.domain.match(/[\w-]+\.?[\w-]+$/)[0];
