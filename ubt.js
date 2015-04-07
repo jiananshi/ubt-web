@@ -110,7 +110,7 @@ void function() {
       handler.call(e.target, e);
     };
     if(element.addEventListener) {
-      element.addEventListener(type, wrapper);
+      element.addEventListener(type, wrapper, true);
     } else if(element.attachEvent) {
       element.attachEvent('on' + type, wrapper);
     }
@@ -121,6 +121,44 @@ void function() {
     return String(e).replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ').replace(/^(.{7})(.{7,})(.{7})$/, function($0, $1, $2, $3) {
       return $1 + '(' + $2.length + ')' + $3;
     });
+  };
+
+  // 兼容地获取元素文本
+  var getText = function(element) {
+    return element.textContent || element.innerText || element.title || element.alt;
+  };
+
+  // 获取元素相关信息（控件可以取与之关联的 label 文字）
+  var getRelatedMessage = function(element) {
+    if(element.tagName !== 'INPUT') return getText(element);
+    var id = element.id;
+    var label;
+    if(id) label = document.querySelector('label[for="' + id + '"]');
+    if(!label) {
+      label = element;
+      while(label = label.parentNode) {
+        if(label.tagName === 'LABEL' || label.hasAttribute('ubt-label')) break;
+      }
+    }
+    if(label) return getText(label);
+    return '';
+  };
+
+  // 获取元素值（label 可以取与之关联的控件值）
+  var getRelatedValue = function(element) {
+    var input;
+    if(/INPUT|TEXTAREA/.test(element.tagName)) {
+      input = element;
+    } else if(element.tagName === 'LABEL' || element.hasAttribute('ubt-label')) {
+      var id = element.getAttribute('for');
+      if(id) input = document.getElementById(id);
+      if(!input) input = element.querySelector('input,textarea');
+    }
+    if(!input) return null;
+    switch(input.type) {
+      case 'checkbox': return input.checked; 
+      default: return input.value;
+    }
   };
 
   // 记录 timing
@@ -183,9 +221,10 @@ void function() {
     var key = 'ubt-click';
     var sendByElement = function(target) {
       var name = target.getAttribute(key);
+      var value = getRelatedValue(target);
+      var message = getRelatedMessage(target);
       // 尽可能地获取点击目标相关信息
-      var message = target.textContent || target.innerText || target.value || target.title || target.alt || target.href;
-      UBT.send('EVENT', { name: name, action: 'click', message: compress(message) });
+      UBT.send('EVENT', { name: name, action: 'click', message: compress(message), value: compress(value) });
     };
     on(document, 'click', function(e) {
       var target = e.target;
