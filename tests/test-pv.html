@@ -1,0 +1,37 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.js"></script>
+
+<script>
+setTimeout(function() {
+  UBT.send('PV', { a: 1, b: 2 });
+}, 100);
+setTimeout(function() {
+  UBT.send('PV', { a: 1, b: 2 });
+}, 200);
+
+var list = [];
+
+window.onsend = function(data) {
+  if(data.type === 'PV') {
+    switch(false) {
+      case 'ssid' in data:
+      case 'pvhash' in data:
+      case data.a === 1:
+      case data.b === 2:
+      case data.pvhash.length === 32:
+      case data.pvhash.length === 32:
+        return Tester.feedback(false);
+    }
+    if(list.push(data) === 2) {
+      switch(false) {
+        case list[0].ssid === list[1].ssid:
+        case list[0].pvhash !== list[1].pvhash:
+          return Tester.feedback(false);
+      }
+      return Tester.feedback(true);
+    };
+  }
+};
+</script>
+

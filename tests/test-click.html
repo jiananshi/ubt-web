@@ -1,0 +1,79 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.js"></script>
+
+<a href="value" ubt-click="a">text</a>
+<a href="value" title="text" ubt-click="a-only-title"></a>
+
+<button ubt-click="button">text</button>
+<button ubt-click="button-only-title" title="text"></button>
+
+<input type="button" ubt-click="input-button" value="value" title="text" />
+
+<label for="label-for-input">text</label> <input id="label-for-input" type="button" ubt-click="label-for-input" value="value" />
+<label>text <input type="button" ubt-click="label-wrap-input" value="value" /></label>
+
+<input type="checkbox" ubt-click="checkbox-has-name" name="text" />
+<input type="checkbox" ubt-click="checkbox-has-title" title="text" />
+<input type="checkbox" checked ubt-click="checkbox-has-name-checked" name="text" />
+<input type="checkbox" checked ubt-click="checkbox-has-title-checked" title="text" />
+
+<span ubt-label>text <input type="text" value="value" ubt-click="text-with-ubtlabel" /></span>
+<input value="value" placeholder="text" ubt-click="text-notype-with-placeholder" />
+
+<textarea placeholder="text" ubt-click="textarea-with-placeholder">value</textarea>
+<textarea name="text" ubt-click="textarea-with-name">value</textarea>
+
+<input name="text" type="radio" ubt-click="radio-checked" checked />
+<input name="text" type="radio" ubt-click="radio" />
+
+<label ubt-click="click-label-wrap-input">text <input value="value" /></label>
+<label ubt-click="click-label-for-input" for="click-on-label-for-input">text</label> <input id="click-on-label-for-input" value="value" />
+<label ubt-click="click-label-without-related">text</label>
+
+<script>
+document.onclick = function(e) {
+  if(e.target.tagName === 'A') e.preventDefault();
+}
+
+window.onload = function() {
+  var buttons = document.querySelectorAll('[ubt-click]');
+  for(var i = 0; i < buttons.length; i++) void function(i) {
+    setTimeout(function() {
+      buttons[i].click();
+    });
+  }(i);
+};
+
+var answers = {
+  'a': '["value","text"]',
+  'a-only-title': '["value","text"]',
+  'button': '[null,"text"]',
+  'button-only-title': '[null,"text"]',
+  'input-button': '["value","text"]',
+  'label-for-input': '["value","text"]',
+  'label-wrap-input': '["value","text"]',
+  'checkbox-has-name': '[true,"text"]',
+  'checkbox-has-title': '[true,"text"]',
+  'checkbox-has-name-checked': '[false,"text"]',
+  'checkbox-has-title-checked': '[false,"text"]',
+  'text-with-ubtlabel': '["value","text"]',
+  'text-notype-with-placeholder': '["value","text"]',
+  'textarea-with-placeholder': '["value","text"]',
+  'textarea-with-name': '["value","text"]',
+  'radio-checked': '[true,"text"]',
+  'radio': '[true,"text"]',
+  'click-label-wrap-input': '["value","text"]',
+  'click-label-for-input': '["value","text"]',
+  'click-label-without-related': '[null,"text"]'
+};
+
+window.onsend = function(data) {
+  if(data.type === 'EVENT' && data.action === 'click') {
+    if(answers[data.name] !== JSON.stringify([ data.value, data.message ])) return Tester.feedback(false);
+    delete answers[data.name];
+    if(JSON.stringify(answers) === '{}') return Tester.feedback(true);
+  }
+};
+</script>
+
