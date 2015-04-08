@@ -116,6 +116,13 @@ void function() {
     }
   };
 
+  // 遍历祖先级元素
+  var forParents = function(element, callback) {
+    for(var target = element; target && target.nodeType === 1; target = target.parentNode) {
+      if(callback(target) === false) break;
+    }
+  };
+
   // 去除字符串头尾空白字符，压缩中间连续空白字符，并将太长的字符串中间部分省略
   var compress = function(e) {
     return String(e).replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ').replace(/^(.{7})(.{7,})(.{7})$/, function($0, $1, $2, $3) {
@@ -135,10 +142,12 @@ void function() {
     var label;
     if(id) label = document.querySelector('label[for="' + id + '"]');
     if(!label) {
-      label = element;
-      while(label = label.parentNode) {
-        if(label.tagName === 'LABEL' || label.hasAttribute('ubt-label')) break;
-      }
+      forParents(element, function(element) {
+        if(element.tagName === 'LABEL' || element.hasAttribute('ubt-element')) {
+          label = element;
+          return false;
+        };
+      });
     }
     if(label) return getText(label);
     return '';
@@ -226,13 +235,11 @@ void function() {
       // 尽可能地获取点击目标相关信息
       UBT.send('EVENT', { name: name, action: 'click', message: compress(message), value: compress(value) });
     };
-    on(document, 'click', function(e) {
-      var target = e.target;
+    on(document, 'click', function(event) {
       // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
-      while(target) {
-        if(target.nodeType === 1 && target.hasAttribute(key)) sendByElement(target);
-        target = target.parentNode;
-      }
+      forParents(event.target, function(element) {
+        if(element.hasAttribute(key)) sendByElement(element);
+      });
     });
   }();
 
@@ -275,14 +282,12 @@ void function() {
       bindList(e.getElementsByTagName('select'), name);
     };
     var operate = function(e) {
-      var target = e.target;
       // 收集具有 ubt-change 属性的元素
       var items = [];
-      while(target) {
-        if(target.tagName === 'LABEL') Array.prototype.push.apply(items, getItemsFromLabel(target));
-        if(target.nodeType === 1 && target.hasAttribute(key)) items.push(target);
-        target = target.parentNode;
-      }
+      forParents(event.target, function(element) {
+        if(element.tagName === 'LABEL') Array.prototype.push.apply(items, getItemsFromLabel(element));
+        if(element.hasAttribute(key)) items.push(element);
+      });
       // 处理这些元素
       for(var i = 0; i < items.length; i++) {
         if(items[i][installed]) continue;
