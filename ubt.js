@@ -124,49 +124,50 @@ void function() {
   };
 
   // 去除字符串头尾空白字符，压缩中间连续空白字符，并将太长的字符串中间部分省略
-  var compress = function(e) {
-    return String(e).replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ').replace(/^(.{7})(.{7,})(.{7})$/, function($0, $1, $2, $3) {
+  var compress = function(data) {
+    if(data === void 0) data = null;
+    if(typeof data !== 'string') return data;
+    return String(data).replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ').replace(/^(.{7})(.{7,})(.{7})$/, function($0, $1, $2, $3) {
       return $1 + '(' + $2.length + ')' + $3;
     });
   };
 
-  // 兼容地获取元素文本
-  var getText = function(element) {
-    return element.textContent || element.innerText || element.title || element.alt;
-  };
-
   // 获取元素相关信息（控件可以取与之关联的 label 文字）
   var getRelatedMessage = function(element) {
-    if(element.tagName !== 'INPUT') return getText(element);
-    var id = element.id;
     var label;
-    if(id) label = document.querySelector('label[for="' + id + '"]');
-    if(!label) {
-      forParents(element, function(element) {
-        if(element.tagName === 'LABEL' || element.hasAttribute('ubt-element')) {
+    if(element.tagName === 'INPUT') {
+      label = element.id && document.querySelector('[for="' + element.id + '"]');
+      if(!label) {
+        forParents(element, function(element) {
+          if(element.tagName !== 'LABEL' && !element.hasAttribute('ubt-label')) return;
           label = element;
           return false;
-        };
-      });
+        });
+      }
+      if(label) element = label;
     }
-    if(label) return getText(label);
-    return '';
+    var text;
+    // 文本域不从内容取文本
+    if(element.tagName !== 'TEXTAREA') text = String(element.textContent || element.innerText || '').replace(/^\s+|\s+$/g, '');
+    return text || element.title || element.alt || element.name || element.placeholder;
   };
 
   // 获取元素值（label 可以取与之关联的控件值）
   var getRelatedValue = function(element) {
     var input;
-    if(/INPUT|TEXTAREA/.test(element.tagName)) {
-      input = element;
-    } else if(element.tagName === 'LABEL' || element.hasAttribute('ubt-label')) {
-      var id = element.getAttribute('for');
-      if(id) input = document.getElementById(id);
-      if(!input) input = element.querySelector('input,textarea');
-    }
-    if(!input) return null;
-    switch(input.type) {
-      case 'checkbox': return input.checked; 
-      default: return input.value;
+    switch(element.tagName) {
+      case 'A':
+        return element.getAttribute('href');
+      case 'INPUT':
+        if(/checkbox|radio/.test(element.type)) return element.checked;
+      case 'TEXTAREA':
+        return element.value;
+      default:
+        if(element.tagName === 'LABEL' || element.hasAttribute('ubt-label')) {
+          var id = element.getAttribute('for');
+          var input = id ? document.getElementById(id) : element.querySelector('input,textarea');
+          return input ? getRelatedValue(input) : null;
+        }
     }
   };
 
@@ -236,8 +237,11 @@ void function() {
       UBT.send('EVENT', { name: name, action: 'click', message: compress(message), value: compress(value) });
     };
     on(document, 'click', function(event) {
+      var element = event.target;
+      // 如果点击的是一个包裹控件的 label 则不做任何处理，因为这种情况会动触发关联控件的 click 事件 
+      if(element.tagName === 'LABEL' && element.querySelector('input,textarea')) return;
       // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
-      forParents(event.target, function(element) {
+      forParents(element, function(element) {
         if(element.hasAttribute(key)) sendByElement(element);
       });
     });
