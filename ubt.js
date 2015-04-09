@@ -149,7 +149,7 @@ void function() {
     var text;
     // 文本域不从内容取文本
     if(element.tagName !== 'TEXTAREA') text = String(element.textContent || element.innerText || '').replace(/^\s+|\s+$/g, '');
-    return text || element.title || element.alt || element.name || element.placeholder;
+    return text || element.title || element.alt || element.name || element.getAttribute('placeholder');
   };
 
   // 获取元素值（label 可以取与之关联的控件值）
@@ -239,7 +239,8 @@ void function() {
     on(document, 'click', function(event) {
       var element = event.target;
       // 如果点击的是一个包裹控件的 label 则不做任何处理，因为这种情况会动触发关联控件的 click 事件 
-      if(element.tagName === 'LABEL' && element.querySelector('input,textarea')) return;
+      var ie8 = /MSIE 8/i.test(navigator.userAgent);
+      if(!ie8 && element.tagName === 'LABEL' && element.querySelector('input,textarea')) return;
       // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
       forParents(element, function(element) {
         if(element.hasAttribute(key)) sendByElement(element);

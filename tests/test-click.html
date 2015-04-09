@@ -33,7 +33,12 @@
 
 <script>
 document.onclick = function(e) {
-  if(e.target.tagName === 'A') e.preventDefault();
+  e = e || event;
+  var target = e.target || e.srcElement;
+  if(target.tagName === 'A') {
+    if(e.preventDefault) e.preventDefault();
+    return false;
+  }
 }
 
 window.onload = function() {

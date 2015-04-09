@@ -21,6 +21,9 @@ var requires = [
   'responseStart'
 ];
 
+// 不支持就直接标识为成功
+if(!window.addEventListener || !window.performance || !window.performance.timing) Tester.feedback(true);
+
 window.onsend = function(data) {
   if(data.type === 'TIMING') {
     for(var i = 0; i < requires.length; i++) if(!(requires[i] in data)) break;
