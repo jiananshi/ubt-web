@@ -1,0 +1,81 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.js"></script>
+
+<input type="checkbox" ubt-change="checkbox-has-name" name="text" />
+<input type="checkbox" ubt-change="checkbox-has-title" title="text" />
+<input type="checkbox" checked ubt-change="checkbox-has-name-checked" name="text" />
+<input type="checkbox" checked ubt-change="checkbox-has-title-checked" title="text" />
+
+<input value="value" placeholder="text" ubt-change="text-notype-with-placeholder" />
+
+<textarea placeholder="text" ubt-change="textarea-with-placeholder">value</textarea>
+<textarea name="text" ubt-change="textarea-with-name">value</textarea>
+
+<input name="text" type="radio" ubt-change="radio-checked" checked />
+<input name="text" type="radio" ubt-change="radio" />
+
+<select name="text" ubt-change="select">
+  <option>value</optino>
+  <option>fuck</optino>
+</select>
+
+<select name="text" ubt-change="select-selected">
+  <option>fuck</optino>
+  <option selected>value</optino>
+</select>
+
+<script>
+document.onclick = function(e) {
+  e = e || event;
+  var target = e.target || e.srcElement;
+  if(target.tagName === 'A') {
+    if(e.preventDefault) e.preventDefault();
+    return false;
+  }
+}
+
+var dispatch = function(element, eventName) {
+  if(document.createEvent) {
+    var event = document.createEvent('Event');
+    event.initEvent(eventName, true, true);
+    element.dispatchEvent(event);
+  } else {
+    var event = document.createEventObject();
+    element.fireEvent('on' + eventName, event);
+  }
+}
+
+window.onload = function() {
+  var buttons = document.querySelectorAll('[ubt-change]');
+  for(var i = 0; i < buttons.length; i++) void function(i) {
+    setTimeout(function() {
+      dispatch(buttons[i], 'mousedown');
+      dispatch(buttons[i], 'change');
+    });
+  }(i);
+};
+
+var answers = {
+  'checkbox-has-name': '[false,"text"]',
+  'checkbox-has-title': '[false,"text"]',
+  'checkbox-has-name-checked': '[true,"text"]',
+  'checkbox-has-title-checked': '[true,"text"]',
+  'text-notype-with-placeholder': '["value","text"]',
+  'textarea-with-placeholder': '["value","text"]',
+  'textarea-with-name': '["value","text"]',
+  'radio-checked': '[true,"text"]',
+  'radio': '[false,"text"]',
+  'select': '["value","text"]',
+  'select-selected': '["value","text"]'
+};
+
+window.onsend = function(data) {
+  if(data.type === 'EVENT' && data.action === 'change') {
+    if(answers[data.name] !== JSON.stringify([ data.value, data.message ])) return Tester.feedback(false);
+    delete answers[data.name];
+    if(JSON.stringify(answers) === '{}') return Tester.feedback(true);
+  }
+};
+</script>
+

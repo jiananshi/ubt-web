@@ -1,0 +1,47 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.js"></script>
+
+<script>
+setTimeout(function() {
+
+  var test1 = UBT.bind('hehe', { a: 1 });
+  var test2 = test1.bind({ b: 2 });
+  test1.send({ b: 2 });
+  test2.send();
+ 
+  var test3 = test1.bind('haha', { b: 2 });
+  var test4 = test2.bind('haha');
+  test3.send();
+  test4.send();
+
+  test4.send('fuck', { a: 3, b: 4 });
+  
+});
+
+window.onsend = function(data) {
+  switch(data.type) {
+    case 'hehe':
+    case 'haha':
+      switch(false) {
+        case data.a === 1:
+        case data.b === 2:
+          return Tester.feedback(false);
+      }
+      return done();
+    case 'fuck':
+      switch(false) {
+        case data.a === 3:
+        case data.b === 4:
+          return Tester.feedback(false);
+      }
+      return done();
+  }
+};
+
+var count = 0;
+var done = function() {
+  if(++count === 4) Tester.feedback(true);
+}
+</script>
+

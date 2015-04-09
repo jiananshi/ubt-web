@@ -110,17 +110,73 @@ void function() {
       handler.call(e.target, e);
     };
     if(element.addEventListener) {
-      element.addEventListener(type, wrapper);
+      element.addEventListener(type, wrapper, true);
     } else if(element.attachEvent) {
       element.attachEvent('on' + type, wrapper);
     }
   };
 
+  // 遍历祖先级元素
+  var forParents = function(element, callback) {
+    for(var target = element; target && target.nodeType === 1; target = target.parentNode) {
+      if(callback(target) === false) break;
+    }
+  };
+
   // 去除字符串头尾空白字符，压缩中间连续空白字符，并将太长的字符串中间部分省略
-  var compress = function(e) {
-    return String(e).replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ').replace(/^(.{7})(.{7,})(.{7})$/, function($0, $1, $2, $3) {
+  var compress = function(data) {
+    if(data === void 0) data = null;
+    if(typeof data !== 'string') return data;
+    return String(data).replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ').replace(/^(.{7})(.{7,})(.{7})$/, function($0, $1, $2, $3) {
       return $1 + '(' + $2.length + ')' + $3;
     });
+  };
+
+  // 获取元素相关信息（控件可以取与之关联的 label 文字）
+  var getRelatedMessage = function(element) {
+    var label;
+    if(element.tagName === 'INPUT') {
+      label = element.id && document.querySelector('[for="' + element.id + '"]');
+      if(!label) {
+        forParents(element, function(element) {
+          if(element.tagName !== 'LABEL' && !element.hasAttribute('ubt-label')) return;
+          label = element;
+          return false;
+        });
+      }
+      if(label) element = label;
+    }
+    var text;
+    // 文本域和下拉框不从内容取文本
+    if(!/TEXTAREA|SELECT/.test(element.tagName)) text = String(element.textContent || element.innerText || '').replace(/^\s+|\s+$/g, '');
+    return text || element.title || element.alt || element.name || element.getAttribute('placeholder');
+  };
+
+  // 获取元素值（label 可以取与之关联的控件值）
+  var getRelatedValue = function(element) {
+    var input;
+    switch(element.tagName) {
+      case 'A':
+        return element.getAttribute('href');
+      case 'INPUT':
+        if(/checkbox|radio/.test(element.type)) return element.checked;
+      case 'TEXTAREA':
+        return element.value;
+      case 'SELECT':
+        var options = element.getElementsByTagName('option');
+        for(var i = 0; i < options.length; i++) {
+          if(options[i].selected) {
+            return options[i].hasAttribute('value') ? options[i].getAttribute('value') : options[i].innerHTML;
+          }
+        }
+        return null;
+      default:
+        if(element.tagName === 'LABEL' || element.hasAttribute('ubt-label')) {
+          var id = element.getAttribute('for');
+          var input = id ? document.getElementById(id) : element.querySelector('input,textarea');
+          return input ? getRelatedValue(input) : null;
+        }
+    }
   };
 
   // 记录 timing
@@ -183,77 +239,62 @@ void function() {
     var key = 'ubt-click';
     var sendByElement = function(target) {
       var name = target.getAttribute(key);
+      var value = getRelatedValue(target);
+      var message = getRelatedMessage(target);
       // 尽可能地获取点击目标相关信息
-      var message = target.textContent || target.innerText || target.value || target.title || target.alt || target.href;
-      UBT.send('EVENT', { name: name, action: 'click', message: compress(message) });
+      UBT.send('EVENT', { name: name, action: 'click', message: compress(message), value: compress(value) });
     };
-    on(document, 'click', function(e) {
-      var target = e.target;
+    on(document, 'click', function(event) {
+      var element = event.target;
+      // 如果点击的是一个包裹控件的 label 则不做任何处理，因为这种情况会动触发关联控件的 click 事件 
+      if(element.tagName === 'LABEL' && element.querySelector('input,textarea')) return;
       // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
-      while(target) {
-        if(target.nodeType === 1 && target.hasAttribute(key)) sendByElement(target);
-        target = target.parentNode;
-      }
+      forParents(element, function(element) {
+        if(element.hasAttribute(key)) sendByElement(element);
+      });
     });
   }();
 
   // 监控值变化事件
   // 逻辑：
-  // 点击后从点击的元素向上追朔获取带 ubt-change 属性的元素
-  // 如果追溯到 LABEL 元素则在 LABEL 的后代中也找带 ubt-change 属性的元素
-  // 取到带 ubt-change 属性的元素后将其自身和内部的所有控件注册上 change 事件
+  // 如果点击到的是一个控件则直接绑定 change 事件
+  // 否则寻找祖先级元素中的 LABEL 并给这个 LABEL 关联的控件绑定 change 事件
   void function() {
     var key ='ubt-change';
     var installed = key + '-installed';
-    var checkType = function(e) {
-      return /^(?:radio|checkbox)$/i.test(e.type);
-    };
-    var bind = function(e, name) {
-      on(e, 'change', function(e) {
-        var target = e.target;
-        var value = checkType(target) ? target.checked : target.value;
-        UBT.send('EVENT', { name: name, action: 'change', value: compress(value) });
+    var bind = function(element, name) {
+      on(element, 'change', function(e) {
+        var value = getRelatedValue(e.target);
+        var message = getRelatedMessage(e.target);
+        UBT.send('EVENT', { name: name, action: 'change', value: compress(value), message: compress(message) });
       });
     };
-    var bindList = function(list, name) {
-      for(var i = 0; i < list.length; i++) {
-        bind(list[i], name);
-      }
+    var tags = [ 'input', 'textarea', 'select' ];
+    var install = function(element) {
+      if(element[installed]) return;
+      element[installed] = true;
+      bind(element, element.getAttribute(key));
     };
-    var getItemsFromLabel = function(label) {
-      var elements = label.getElementsByTagName('*');
-      var matched = [];
-      for(var i = 0; i < elements.length; i++) {
-        if(elements[i].hasAttribute(key)) matched.push(elements[i]);
+    var search = function(event) {
+      var element = event.target;
+      if(!new RegExp(tags.join('|'), 'i').test(element.tagName)) {
+        var label = element.tagName === 'LABEL' && element;
+        if(!label) {
+          forParents(element, function(element) {
+            label = element.tagName === 'LABEL' && element;
+            if(label) return false;
+          });
+        }
+        if(label) {
+          var id = label.getAttribute('for');
+          var element = id ? document.getElementById(id) : label.querySelector(tags);
+        }
       }
-      return matched;
-    };
-    var install = function(e) {
-      var name = e.getAttribute(key);
-      bind(e, name);
-      // 广播到后代
-      bindList(e.getElementsByTagName('input'), name);
-      bindList(e.getElementsByTagName('select'), name);
-    };
-    var operate = function(e) {
-      var target = e.target;
-      // 收集具有 ubt-change 属性的元素
-      var items = [];
-      while(target) {
-        if(target.tagName === 'LABEL') Array.prototype.push.apply(items, getItemsFromLabel(target));
-        if(target.nodeType === 1 && target.hasAttribute(key)) items.push(target);
-        target = target.parentNode;
-      }
-      // 处理这些元素
-      for(var i = 0; i < items.length; i++) {
-        if(items[i][installed]) continue;
-        install(items[i]);
-        items[i][installed] = true;
-      }
+      if(element && element.hasAttribute(key)) install(element);
     };
     // 由于 change 不冒泡，所以需要由一个鼠标或键盘事件来引导
-    on(document, 'mousedown', operate);
-    on(document, 'keydown', operate);
+    on(document, 'mousedown', search);
+    on(document, 'keydown', search);
   }();
 
 }();
