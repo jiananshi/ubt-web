@@ -102,8 +102,6 @@ void function() {
 // 全局行为
 void function() {
 
-  var ie8 = /MSIE 8/i.test(navigator.userAgent);
-
   // 兼容的事件绑定
   var on = function(element, type, handler) {
     var wrapper = function(e) {
@@ -249,7 +247,7 @@ void function() {
     on(document, 'click', function(event) {
       var element = event.target;
       // 如果点击的是一个包裹控件的 label 则不做任何处理，因为这种情况会动触发关联控件的 click 事件 
-      if(!ie8 && element.tagName === 'LABEL' && element.querySelector('input,textarea')) return;
+      if(element.tagName === 'LABEL' && element.querySelector('input,textarea')) return;
       // 只要祖先级元素中存在 ubt-click 属性视为 ubt-click，于是允许嵌套
       forParents(element, function(element) {
         if(element.hasAttribute(key)) sendByElement(element);
