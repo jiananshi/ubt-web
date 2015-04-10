@@ -1,10 +1,25 @@
 # web-ubt 组件
+###### ELEME Web 产品通用 UBT 组件
+
+### 安装和构建
+
+##### bower 安装
+
+```bash
+bower install git@github.com:eleme/ubt-web.js
+```
+
+##### 开发
+
+```bash
+git clone git@github.com:eleme/ubt-web.js
+cd ubt-web
+make dev
+```
 
 ### 接口描述
 
 ```js
-var typeubt = UBT.bindType(type);
-var dataubt = UBT.bindData(objs...);
 var sububt = UBT.bind([type, ] objs...);
 var subsububt = sububt.bind(...);
 UBT.send([type, ] objs...)
@@ -30,12 +45,6 @@ var ab.send('PV', { c: 'yyy' });
 // 当然也可以数据和类型同时固定
 var abpv = UBT.bind('PV', { a: 233, b: 'xxx' });
 abpv.send();
-
-// bind* 系列方法均返回一个与 UBT 相同原型的对象，可以链式调用 bind*
-var pv = UBT.bindType('PV');
-var pva = pv.bindData({ a: 233 });
-var pvb = pv.bindData({ b: 'xxx' });
-var pvac = pva.bindData({ c: 'yyy' });
 
 // 直接的 bind 方法是一种快捷方式，如果第一个参数是字符串自动被作为 type
 var pv = UBT.bind('PV');
