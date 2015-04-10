@@ -2,8 +2,8 @@
 export var on = function(element, type, handler) {
   var wrapper = function(e) {
     e = e || event;
-    e.target = e.target || e.srcElement;
-    handler.call(e.target, e);
+    var arg = { target: e.target || e.srcElement };
+    handler.call(arg.target, arg);
   };
   if(element.addEventListener) {
     element.addEventListener(type, wrapper, true);
