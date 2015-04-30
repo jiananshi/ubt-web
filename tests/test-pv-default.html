@@ -1,0 +1,17 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+<script>
+window.onsend = function(data) {
+  if(data.type === 'PV') {
+    switch(false) {
+      case 'ssid' in data:
+      case 'pvhash' in data:
+      case data.pvhash.length === 32:
+        return Tester.feedback(false);
+    }
+    return Tester.feedback(true);
+  }
+};
+</script>
+<script src="../ubt.min.js"></script>
+

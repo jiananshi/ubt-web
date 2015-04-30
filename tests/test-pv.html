@@ -20,7 +20,6 @@ window.onsend = function(data) {
       case data.a === 1:
       case data.b === 2:
       case data.pvhash.length === 32:
-      case data.pvhash.length === 32:
         return Tester.feedback(false);
     }
     if(list.push(data) === 2) {

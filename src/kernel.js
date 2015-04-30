@@ -76,8 +76,6 @@ InternalUBT.prototype.send = function() {
 
 // 初始化 UBT
 export var UBT = new InternalUBT('DEFAULT', new function(){
-  // 初始化 pvhash
-  this.pvhash = uuid();
   // 初始化 ubt-ssid（种植第一方 Cookie）
   this.ssid = document.cookie.match(/(?:^|; )ubt_ssid=(.*?)(?:; |$)|$/)[1];
   if(!this.ssid) {
@@ -90,4 +88,7 @@ export var UBT = new InternalUBT('DEFAULT', new function(){
     document.cookie = 'ubt_ssid=' + this.ssid + '; Expires=Wed, 31 Dec 2098 16:00:00 GMT; Domain=' + domain + '; Path=/';
   }
 });
+
+// 发送一个初始 PV
+UBT.send('PV');
 
