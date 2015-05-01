@@ -90,5 +90,10 @@ export var UBT = new InternalUBT('DEFAULT', new function(){
 });
 
 // 发送一个初始 PV
-UBT.send('PV');
+var html = document.documentElement;
+UBT.send('PV', {
+  resolution: Math.max(html.clientWidth, window.innerWidth || 0) + 'x' + Math.max(html.clientHeight, window.innerHeight || 0),
+  location: location.href,
+  referrer: document.referrer
+});
 
