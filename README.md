@@ -1,23 +1,42 @@
-# web-ubt 组件
-###### ELEME Web 产品通用 UBT 组件
+# ELEME Web 产品通用 UBT JS SDK
 
-### 安装和构建
+### Lv.0 基本需求（PV、UV、JSERROR、Performance）
 
-##### bower 安装
+如果需求是「监控访问量」这种程度，则属于这个级别的需求。
 
-```bash
-bower install git@github.com:eleme/ubt-web.js
-```
+这时只需要引入 `ubt.js` 即可
 
-##### 开发
+具体的引入方式，推荐使用 `bower`
 
 ```bash
-git clone git@github.com:eleme/ubt-web.js
-cd ubt-web
-make dev
+bower install git@github.com:eleme/ubt-web.git
 ```
 
-### 接口描述
+### Lv.1 事件监控需求（点击监控）
+
+当需求是对某个元素点击进行监控时，就属于这个级别的需求。
+
+首先，产品经理或大数据组应该提供一份文档（如果没提供就找它们要）。
+
+这份文档里会描述哪些地方需要埋点，每个埋点都有一个唯一标识符，这里姑且称为「埋点名」。
+
+这时需要对 HTML 做一些操作，具体操作如下：
+
+```html
+<a href="#" ubt-click="埋点名">我是一个需要监控点击的链接</a>
+
+<button ubt-click="埋点名">我是一个需要监控点击的按钮</button>
+
+<div ubt-click="埋点名">我是一个需要监控点击的元素</div>
+```
+
+### Lv.2 定制需求 
+
+有时候产品会想出一些神奇的需求，这时候就需要定制。
+
+引入 `ubt.js` 后会再全局定义一个叫 UBT 的对象（注意：Angular 环境不会在全局注册，而是注册一个叫 UBT 的 module 和 factory）。
+
+###### API 描述
 
 ```js
 var sububt = UBT.bind([type, ] objs...);
@@ -25,7 +44,7 @@ var subsububt = sububt.bind(...);
 UBT.send([type, ] objs...)
 ```
 
-### 用法
+###### 用法
 
 ```js
 // 记录一个 PV
@@ -72,3 +91,34 @@ UBT.send('PV', {
 // type 就是上面用到各种 type，用于描述当前记录的类型
 ```
 
+## 开发
+
+本项目采用 ES6 模块打包，已配置 Makefile
+
+```bash
+# 生成 ubt.js 及其压缩版本 ubt.min.js
+make build
+```
+
+```bash
+# 进入开发模式，会自动 watch 文件修改，并 build
+make dev
+```
+
+项目中配置了各种测试，开发时请先跑通测试后再提交代码。
+
+```bash
+# 构建 ubt.js
+make build
+# 初始化配置
+cd tests
+bower install
+```
+
+访问：（可能需要搭一个 http 服务器环境）
+
+```
+/tests/test.html
+```
+
+如果有功能的增加和调整，请同步相应的测试。
