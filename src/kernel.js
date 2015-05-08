@@ -87,6 +87,8 @@ export var UBT = new InternalUBT('DEFAULT', new function(){
     // 将 ssid 存入根域的根目录 Cookie（localStorage 不能跨域）
     document.cookie = 'ubt_ssid=' + this.ssid + '; Expires=Wed, 31 Dec 2098 16:00:00 GMT; Domain=' + domain + '; Path=/';
   }
+  // 为每个请求加一个时间戳
+  this.timestamp = function() { return new Date().getTime().toString(36); };
 });
 
 // 发送一个初始 PV
