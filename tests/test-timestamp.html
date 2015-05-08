@@ -1,0 +1,14 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.min.js"></script>
+
+<script>
+Date.prototype.getTime = function() {
+  return 83;
+};
+
+window.onsend = function(data) {
+  Tester.feedback(data.timestamp === '2b');
+};
+</script>
+
