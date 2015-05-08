@@ -1,6 +1,6 @@
 {
   "name": "ubt-web",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/eleme/ubt-web",
   "authors": [
     "frontend@ele.me"
@@ -14,6 +14,6 @@
     "node_modules",
     "bower_components"
   ],
-  "description": "ELEME Web 产品通用 UBT 组件",
+  "description": "ELEME Web 产品通用 UBT JS SDK",
   "main": "ubt.js"
 }
