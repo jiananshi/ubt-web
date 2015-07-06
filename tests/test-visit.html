@@ -1,0 +1,29 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.min.js"></script>
+
+<button>toggle</button>
+<div class="layer" ubt-visit="233">layer</div>
+
+<script>
+window.onsend = function(data) {
+  if(data.type !== 'EVENT') return;
+  if(data.action !== 'visit') return;
+  Tester.feedback(data.name === '233');
+};
+
+var layer = document.querySelector('.layer');
+var button = document.querySelector('button');
+
+layer.style.display = 'none';
+var visible = false;
+
+button.onclick = function() {
+  layer.style.display = visible ? 'none' : 'block';
+  visible = !visible;
+};
+
+setTimeout(function() {
+  button.click();
+});
+</script>
