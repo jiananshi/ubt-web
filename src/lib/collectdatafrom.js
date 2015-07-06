@@ -11,10 +11,11 @@ export default function(element) {
 
   // 从元素上获取 ubt-data-* 属性
   var attrs = element.attributes;
-  var name, i;
+  var node, i;
   for(i = 0; i < attrs.length; i++) {
-    if(/^ubt-data-(\w+)/.test(attrs[i])) {
-      result[RegExp.$1] = element.getAttribute(RegExp.$1);
+    node = attrs[i];
+    if(/^ubt-data-(\w+)/.test(node.name)) {
+      result[RegExp.$1] = node.value;
     }
   }
   
