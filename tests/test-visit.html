@@ -6,9 +6,11 @@
 <div class="layer" ubt-visit="233">layer</div>
 
 <script>
+var result = [];
+
 window.onsend = function(data) {
   if(data.type !== 'EVENT') return;
-  Tester.feedback(data.id === '233');
+  result.push(data.id);
 };
 
 var layer = document.querySelector('.layer');
@@ -21,6 +23,12 @@ button.onclick = function() {
   layer.style.display = visible ? 'none' : 'block';
   visible = !visible;
 };
+
+setTimeout(function() {
+  var json = JSON.stringify(result);
+  Tester.log(json);
+  Tester.feedback(json === '["233"]');
+}, 2000);
 
 setTimeout(function() {
   button.click();

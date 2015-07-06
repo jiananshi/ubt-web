@@ -3,11 +3,18 @@ import collectDataFrom from 'src/lib/collectdatafrom';
 
 var key = 'ubt-visit';
 
+var sended = {};
+
 var visit = function(element) {
-  UBT.send('EVENT', {
-    id: element.getAttribute(key),
-    params: collectDataFrom(element)
-  });
+  var id = element.getAttribute(key);
+  if(!sended[id]) {
+    UBT.send('EVENT', {
+      id: id,
+      params: collectDataFrom(element)
+    });
+    sended[id] = true;
+  }
+  element.removeAttribute(key);
 };
 
 var checkVisibility = function(element) {
@@ -15,9 +22,9 @@ var checkVisibility = function(element) {
 };
 
 var watch = function() {
-  var elements = document.querySelectorAll('[ubt-visit]');
+  var elements = document.querySelectorAll('[' + key + ']');
   for(var i = 0; i < elements.length; i++) checkVisibility(elements[i]);
-  setTimeout(watch, 1000);
+  setTimeout(watch, 800);
 };
 
 watch();
