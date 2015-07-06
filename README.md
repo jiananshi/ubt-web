@@ -12,22 +12,59 @@
 bower install git@github.com:eleme/ubt-web.git
 ```
 
-### Lv.1 事件监控需求（点击监控）
+### Lv.1 事件监控需求
+
+##### click 监控
 
 当需求是对某个元素点击进行监控时，就属于这个级别的需求。
 
-首先，产品经理或大数据组应该提供一份文档（如果没提供就找它们要）。
+首先，让产品经理到大数据组申请一份埋点 ID 列表（每个埋点都有全局的唯一 ID）。
 
-这份文档里会描述哪些地方需要埋点，每个埋点都有一个唯一标识符，这里姑且称为「埋点名」。
-
-这时需要对 HTML 做一些操作，具体操作如下：
+然后需要对 HTML 做一些操作，具体操作如下：
 
 ```html
-<a href="#" ubt-click="埋点名">我是一个需要监控点击的链接</a>
+<a href="#" ubt-click="埋点 ID">我是一个需要监控点击的链接</a>
 
-<button ubt-click="埋点名">我是一个需要监控点击的按钮</button>
+<button ubt-click="埋点 ID">我是一个需要监控点击的按钮</button>
 
-<div ubt-click="埋点名">我是一个需要监控点击的元素</div>
+<div ubt-click="埋点 ID">我是一个需要监控点击的元素</div>
+```
+
+##### change 监控
+
+同点击监控一样只不过这里监控元素的 change 事件。
+
+```html
+<input ubt-change="埋点 ID" />
+
+<select ubt-change="埋点 ID">
+  <option value="1">item1</option>
+  <option value="2">item2</option>
+</select>
+```
+
+##### visit 监控
+
+当需要监控一个元素是否在页面上显示时就使用这个。
+
+```html
+<div ubt-visit="埋点 ID">aaaa</div>
+```
+
+注意，如果元素是隐藏的则不会触发。
+
+而且每个元素的 visit 事件只触发一次，即便把一个元素隐藏掉重新显示出来也不会重发触发。
+
+此外，这个事件并不是事实的，总是有个延迟（因为实现不支持事实监控显示），目前暂定 1 秒。
+
+因此，如果一个元素显示后又立即被隐藏掉，那就可能不会触发这个事件。
+
+##### 事件参数补充
+
+有时候事件还需要补充一些额外的参数，这可以通过在元素上设置 ubt-data-* 属性来实现。
+
+```html
+<button ubt-click="埋点 ID" ubt-data-username="阿饿君">点击这个按钮会带上 username 参数</button>
 ```
 
 ### Lv.2 定制需求 
