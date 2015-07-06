@@ -80,8 +80,8 @@ expection.then(function() {
 });
 
 window.onsend = function(data) {
-  if(data.type !== 'EVENT' || data.action !== 'click') return;
-  var result = JSON.stringify([ data.name, data.value, data.message ]);
+  if(data.type !== 'EVENT') return;
+  var result = JSON.stringify([ data.id, data.params.value, data.params.message ]);
   Tester.log(result);
   expection.answer(result);
 };

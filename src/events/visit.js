@@ -1,15 +1,14 @@
 import UBT from 'src/kernel';
-import compress from 'src/lib/compress';
-import getRelatedValue from 'src/lib/getrelatedvalue';
-import getRelatedMessage from 'src/lib/getrelatedmessage';
+import collectDataFrom from 'src/lib/collectdatafrom';
+
+var key = 'ubt-visit';
 
 var visit = function(element) {
-  var name = element.getAttribute('ubt-visit');
-  var value = getRelatedValue(element);
-  var message = getRelatedMessage(element);
-  UBT.send('EVENT', { name: name, action: 'visit', message: compress(message), value: compress(value) });
-  element.removeAttribute('ubt-visit');
-}
+  UBT.send('EVENT', {
+    id: element.getAttribute(key),
+    params: collectDataFrom(element)
+  });
+};
 
 var checkVisibility = function(element) {
   if(element.offsetWidth + element.offsetHeight) visit(element);

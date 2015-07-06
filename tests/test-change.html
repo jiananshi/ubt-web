@@ -16,13 +16,13 @@
 <input name="text" type="radio" ubt-change="radio" />
 
 <select name="text" ubt-change="select">
-  <option>value</optino>
-  <option>fuck</optino>
+  <option value="value">value</optino>
+  <option value="fuck">fuck</optino>
 </select>
 
 <select name="text" ubt-change="select-selected">
-  <option>fuck</optino>
-  <option selected>value</optino>
+  <option value="fuck">fuck</optino>
+  <option selected value="value">value</optino>
 </select>
 
 <script>
@@ -56,26 +56,31 @@ window.onload = function() {
   }(i);
 };
 
-var answers = {
-  'checkbox-has-name': '[false,"text"]',
-  'checkbox-has-title': '[false,"text"]',
-  'checkbox-has-name-checked': '[true,"text"]',
-  'checkbox-has-title-checked': '[true,"text"]',
-  'text-notype-with-placeholder': '["value","text"]',
-  'textarea-with-placeholder': '["value","text"]',
-  'textarea-with-name': '["value","text"]',
-  'radio-checked': '[true,"text"]',
-  'radio': '[false,"text"]',
-  'select': '["value","text"]',
-  'select-selected': '["value","text"]'
-};
+var expection = new Tester.Expection([
+  '["checkbox-has-name",false,"text"]',
+  '["checkbox-has-title",false,"text"]',
+  '["checkbox-has-name-checked",true,"text"]',
+  '["checkbox-has-title-checked",true,"text"]',
+  '["text-notype-with-placeholder","value","text"]',
+  '["textarea-with-placeholder","value","text"]',
+  '["textarea-with-name","value","text"]',
+  '["radio-checked",true,"text"]',
+  '["radio",false,"text"]',
+  '["select","value","text"]',
+  '["select-selected","value","text"]'
+]);
+
+expection.then(function() {
+  Tester.feedback(true);
+}, function() {
+  Tester.feedback(false);
+});
 
 window.onsend = function(data) {
-  if(data.type === 'EVENT' && data.action === 'change') {
-    if(answers[data.name] !== JSON.stringify([ data.value, data.message ])) return Tester.feedback(false);
-    delete answers[data.name];
-    if(JSON.stringify(answers) === '{}') return Tester.feedback(true);
-  }
+  if(data.type !== 'EVENT') return;
+  var result = JSON.stringify([ data.id, data.params.value, data.params.message ]);
+  Tester.log(result);
+  expection.answer(result);
 };
 </script>
 

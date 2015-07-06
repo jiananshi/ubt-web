@@ -1,9 +1,7 @@
 import UBT from 'src/kernel';
 import on from 'src/lib/on';
-import compress from 'src/lib/compress';
 import parents from 'src/lib/parents';
-import getRelatedValue from 'src/lib/getrelatedvalue';
-import getRelatedMessage from 'src/lib/getrelatedmessage';
+import collectDataFrom from 'src/lib/collectdatafrom';
 
 // 监控值变化事件
 // 逻辑：
@@ -13,9 +11,10 @@ var key ='ubt-change';
 var installed = key + '-installed';
 var bind = function(element, name) {
   on(element, 'change', function(e) {
-    var value = getRelatedValue(e.target);
-    var message = getRelatedMessage(e.target);
-    UBT.send('EVENT', { name: name, action: 'change', value: compress(value), message: compress(message) });
+    UBT.send('EVENT', {
+      id: e.target.getAttribute(key),
+      params: collectDataFrom(e.target)
+    });
   });
 };
 var tags = [ 'input', 'textarea', 'select' ];
