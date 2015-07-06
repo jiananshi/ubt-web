@@ -1,5 +1,5 @@
-import { UBT } from 'src/kernel';
-import { on } from 'src/lib/on';
+import UBT from 'src/kernel';
+import on from 'src/lib/on';
 
 var timing = function() {
   setTimeout(function(){
@@ -30,4 +30,3 @@ var timing = function() {
 };
 
 if(window.performance && window.performance.timing) on(window, 'load', timing);
-

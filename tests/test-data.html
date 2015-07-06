@@ -1,0 +1,19 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.min.js"></script>
+
+<button ubt-click="233" ubt-data-xxx="test" ubt-data-message="ok">test</button>
+
+<script>
+window.onsend = function(data) {
+  if(data.type !== 'EVENT') return;
+  Tester.log(JSON.stringify(data.params));
+  Tester.feedback(data.params.xxx === 'test' && data.params.message === 'ok');
+};
+
+var button = document.querySelector('button');
+
+setTimeout(function() {
+  button.click();
+});
+</script>

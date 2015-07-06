@@ -1,4 +1,4 @@
-import { UBT } from 'src/kernel';
+import UBT from 'src/kernel';
 
 // 用于缓存已经发送过的错误信息
 var errorCache = {};

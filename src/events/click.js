@@ -1,18 +1,16 @@
-import { UBT } from 'src/kernel';
-import { on } from 'src/lib/on';
-import { compress } from 'src/compress';
-import { parents} from 'src/lib/parents';
-import { getRelatedValue, getRelatedMessage } from 'src/getrelated';
+import UBT from 'src/kernel';
+import on from 'src/lib/on';
+import parents from 'src/lib/parents';
+import collectDataFrom from 'src/lib/collectdatafrom';
 
 // 监控点击事件
 var key = 'ubt-click';
 
 var sendByElement = function(target) {
-  var name = target.getAttribute(key);
-  var value = getRelatedValue(target);
-  var message = getRelatedMessage(target);
-  // 尽可能地获取点击目标相关信息
-  UBT.send('EVENT', { name: name, action: 'click', message: compress(message), value: compress(value) });
+  UBT.send('EVENT', {
+    id: target.getAttribute(key),
+    params: collectDataFrom(target)
+  });
 };
 
 on(document, 'click', function(event) {

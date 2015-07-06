@@ -1,5 +1,5 @@
 // 兼容的事件绑定
-export var on = function(element, type, handler) {
+export default function(element, type, handler) {
   var wrapper = function(e) {
     e = e || event;
     var arg = { target: e.target || e.srcElement };

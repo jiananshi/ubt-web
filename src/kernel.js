@@ -1,4 +1,4 @@
-import { uuid } from 'src/lib/uuid';
+import uuid from 'src/lib/uuid';
 
 // 只有 PV_RECEIVER 才会种植第三方 Cookie
 var NONPV_RECEIVER = 'https://web-ubt.ele.me/par.gif';
@@ -75,7 +75,7 @@ InternalUBT.prototype.send = function() {
 };
 
 // 初始化 UBT
-export var UBT = new InternalUBT('DEFAULT', new function(){
+var UBT = new InternalUBT('DEFAULT', new function(){
   // 初始化 ubt-ssid（种植第一方 Cookie）
   this.ssid = document.cookie.match(/(?:^|; )ubt_ssid=(.*?)(?:; |$)|$/)[1];
   if(!this.ssid) {
@@ -99,3 +99,4 @@ UBT.send('PV', {
   referrer: document.referrer
 });
 
+export default UBT;
