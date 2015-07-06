@@ -1,8 +1,9 @@
-import { UBT } from 'src/kernel';
-import { on } from 'src/lib/on';
-import { compress } from 'src/compress';
-import { parents} from 'src/lib/parents';
-import { getRelatedValue, getRelatedMessage } from 'src/getrelated';
+import UBT from 'src/kernel';
+import on from 'src/lib/on';
+import compress from 'src/lib/compress';
+import parents from 'src/lib/parents';
+import getRelatedValue from 'src/lib/getrelatedvalue';
+import getRelatedMessage from 'src/lib/getrelatedmessage';
 
 // 监控点击事件
 var key = 'ubt-click';

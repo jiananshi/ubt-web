@@ -1,9 +1,9 @@
-import { UBT } from 'src/kernel';
+import UBT from 'src/kernel';
 
-import 'src/timing';
-import 'src/event/click';
-import 'src/event/change';
-import 'src/event/error';
+import 'src/tasks/timing';
+import 'src/events/click';
+import 'src/events/change';
+import 'src/events/error';
 
 void function() {
   switch(true) {
@@ -14,4 +14,3 @@ void function() {
       window.UBT = UBT;
   }
 }();
-
