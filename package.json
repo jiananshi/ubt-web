@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "install": "webpack -p"
+  },
+  "dependencies": {
+    "babel-loader": "^5.3.2",
+    "webpack": "^1.11.0"
+  }
+}

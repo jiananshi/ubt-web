@@ -137,11 +137,6 @@ UBT.send('PV', {
 make build
 ```
 
-```bash
-# 进入开发模式，会自动 watch 文件修改，并 build
-make dev
-```
-
 项目中配置了各种测试，开发时请先跑通测试后再提交代码。
 
 ```bash
