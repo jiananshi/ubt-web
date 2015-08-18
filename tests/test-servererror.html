@@ -1,0 +1,27 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="../bower_components/xceptor/xceptor.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.min.js"></script>
+
+<script>
+var answer = { url: '/500.html', status: 500 };
+
+XCeptor.get(/(?=)/, function(req, res) {
+  res.status = answer.status;
+  return false;
+});
+
+var xhr = new XMLHttpRequest();
+xhr.open('GET', answer.url);
+xhr.send();
+xhr.onreadystatechange = function() {
+  if(xhr.readyState < 4) return;
+};
+
+onsend = function(data) {
+  if(data.type !== 'SERVERERROR') return;
+  Tester.assert(data.url === answer.url);
+  Tester.assert(data.status === answer.status);
+  Tester.feedback(true);
+}
+</script>

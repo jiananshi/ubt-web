@@ -1,0 +1,28 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="../bower_components/xceptor/xceptor.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.min.js"></script>
+
+<script>
+UBT.TIMEOUT = 100;
+var answer = { url: '/500.html' };
+
+XCeptor.get(/(?=)/, function(req, res) {
+  res.status = answer.status;
+  return { then: function() {} };
+});
+
+var xhr = new XMLHttpRequest();
+xhr.open('GET', answer.url);
+xhr.send();
+xhr.onreadystatechange = function() {
+  if(xhr.readyState < 4) return;
+};
+
+onsend = function(data) {
+  if(data.type !== 'APITIMEOUT') return;
+  Tester.assert(data.url === answer.url);
+  Tester.assert(data.timeout === UBT.TIMEOUT);
+  Tester.feedback(true);
+}
+</script>
