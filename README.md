@@ -9,7 +9,7 @@
 具体的引入方式，推荐使用 `bower`
 
 ```bash
-bower install git@github.com:eleme/ubt-web.git
+bower install git@github.com:eleme/ubt-web.git --save-dev
 ```
 
 ### Lv.1 事件监控需求
@@ -67,7 +67,7 @@ bower install git@github.com:eleme/ubt-web.git
 <button ubt-click="埋点 ID" ubt-data-username="阿饿君">点击这个按钮会带上 username 参数</button>
 ```
 
-### Lv.2 定制需求 
+### Lv.2 定制需求
 
 有时候产品会想出一些神奇的需求，这时候就需要定制。
 
