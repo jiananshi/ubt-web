@@ -1,5 +1,5 @@
 var UBT = require('../lib/entry.js');
-var XCeptor = require('exports?XCeptor!../bower_components/xceptor/xceptor.js');
+var XCeptor = require('exports?XCeptor!xceptor');
 
 UBT.TIMEOUT = 5000;
 
