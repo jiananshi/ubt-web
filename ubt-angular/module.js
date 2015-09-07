@@ -5,7 +5,11 @@ module.exports = angular.module('UBT', []).factory('UBT', ['$rootScope', functio
       return $rootScope.user && $rootScope.user.id;
     },
     geohash: function() {
-      return localStorage.getItem('GEOHASH') || '';
+      try {
+        return localStorage.getItem('GEOHASH') || '';
+      } catch(error) {
+        return '';
+      }
     }
   });
 }]);
