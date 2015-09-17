@@ -12,7 +12,7 @@ XCeptor.when(/(?=)/, /(?=)/, function(req, res) {
   }
 }, function(req, res) {
   clearTimeout(req.customData.timer);
-  if(res.status / 100 | 0 === 5) {
+  if(res.status >= 500) {
     setTimeout(function() {
       UBT.send('SERVERERROR', {
         status: res.status,
