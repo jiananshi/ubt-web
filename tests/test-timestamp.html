@@ -1,7 +1,13 @@
 <script src="bower_components/tester/tester.js"></script>
 <script src="onsend.js"></script>
 <script src="../ubt.min.js"></script>
-
+<script>
+if(!-[1,]) {
+  Tester.log('IE 8 ignore');
+  Tester.feedback(true);
+  document.write('<!--');
+}
+</script>
 <script>
 Date.prototype.getTime = function() {
   return 83;
@@ -11,4 +17,3 @@ window.onsend = function(data) {
   Tester.feedback(data.timestamp === '2b');
 };
 </script>
-
