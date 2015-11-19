@@ -1,3 +1,12 @@
+help:
+	@echo "# common tasks"
+	@echo "$$ [35mmake[0m                            # help"
+	@echo "$$ [35mmake node_modules[0m               # install dev dependencies"
+	@echo "$$ [35mmake build[0m                      # build only"
+	@echo "$$ [35mmake tag[0m                        # make a tag version"
+	@echo "$$ [35mmake test[0m                       # open test page"
+	@echo ""
+
 node_modules: package.json
 	@npm install
 
