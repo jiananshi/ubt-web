@@ -1,9 +1,12 @@
 {
-  "private": true,
+  "version": "0.3.12",
+  "index": "ubt.min.js",
   "scripts": {
-    "install": "bower install && webpack -p"
+    "build": "bower install && webpack -p"
   },
-  "dependencies": {
+  "repository": "https://github.com/eleme/ubt-web",
+  "license": "MIT",
+  "devDependencies": {
     "babel-loader": "5.3.2",
     "exports-loader": "0.6.2",
     "webpack": "1.11.0",
