@@ -1,5 +1,36 @@
 # ELEME Web 产品通用 UBT JS SDK
 
+### 安装与引用
+
+###### 使用 bower
+
+```bash
+bower install eleme-ubt --save
+```
+
+```html
+<script src="/bower_components/eleme-ubt/ubt.min.js"></script>
+```
+
+###### 使用 npm
+
+```bash
+npm install eleme-ubt --save
+```
+
+```html
+<script src="/node_modules/eleme-ubt/ubt.min.js"></script>
+```
+
+同时提供 Angular 版，`ubt-angular.min.js`
+
+```js
+angular.module('moduleName', [
+  // ... 其它依赖
+  'UBT'
+]);
+```
+
 ### Lv.0 基本需求（PV、UV、JSERROR、Performance）
 
 如果需求是「监控访问量」这种程度，则属于这个级别的需求。
