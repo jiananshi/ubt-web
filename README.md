@@ -161,27 +161,16 @@ UBT.send('PV', {
 
 ## 开发
 
-本项目采用 ES6 模块打包，已配置 Makefile
+本项目采用 webpack 打包，已配置 Makefile
 
 ```bash
-# 生成 ubt.js 及其压缩版本 ubt.min.js
 make build
 ```
 
 项目中配置了各种测试，开发时请先跑通测试后再提交代码。
 
 ```bash
-# 构建 ubt.js
-make build
-# 初始化配置
-cd tests
-bower install
-```
-
-访问：（可能需要搭一个 http 服务器环境）
-
-```
-/tests/test.html
+make test
 ```
 
 如果有功能的增加和调整，请同步相应的测试。
