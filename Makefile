@@ -19,14 +19,14 @@ test: build
 
 tag:
 	@\
-	version=$$(cat bower.json | grep "version" | awk -F '"' '{print $$4}'); \
 	if [ $$(git status -s | wc -l) -gt 0 ]; then \
           echo "请先打好 commit"; \
 	else \
-	  git checkout HEAD~0; \
+	  git checkout $$(git rev-parse HEAD) 2>/dev/null; \
 	  sed -i '' '/.*\.min\.js/d' .gitignore; \
           make build; \
 	  git add . -A; \
+	  version=$$(cat bower.json | grep "version" | awk -F '"' '{print $$4}'); \
 	  git commit -m $$version; \
 	  git tag $$version -f; \
 	fi
