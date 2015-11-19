@@ -4,7 +4,11 @@ node_modules: package.json
 build: node_modules
 	@npm run build
 
-tag: build
+test: build
+	@python -m SimpleHTTPServer 3153 > /dev/null 2>&1 &
+	@open http://127.0.0.1:3153/tests
+
+tag:
 	@\
 	version=$$(cat bower.json | grep "version" | awk -F '"' '{print $$4}'); \
 	if [ $$(git status -s | wc -l) -gt 0 ]; then \
