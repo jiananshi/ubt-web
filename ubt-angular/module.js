@@ -4,6 +4,13 @@ module.exports = angular.module('UBT', []).factory('UBT', ['$rootScope', functio
     user_id: function() {
       return $rootScope.user && $rootScope.user.id;
     },
+    city_id: function() {
+      try {
+        return localStorage.getItem('CITY_ID') || '';
+      } catch(error) {
+        return '';
+      }
+    },
     geohash: function() {
       try {
         return localStorage.getItem('GEOHASH') || '';
