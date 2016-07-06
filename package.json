@@ -1,6 +1,6 @@
 {
   "name": "eleme-ubt",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "index": "ubt.min.js",
   "scripts": {
     "build": "bower install && webpack -p"
@@ -15,6 +15,6 @@
   },
   "dependencies": {
     "angular": "^1.5.0",
-    "xceptor": "~0.2.6"
+    "xceptor": "~0.2.8"
   }
 }
