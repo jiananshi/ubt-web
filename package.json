@@ -1,9 +1,9 @@
 {
   "name": "eleme-ubt",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "index": "ubt.min.js",
   "scripts": {
-    "build": "bower install && webpack -p"
+    "build": "webpack -p"
   },
   "repository": "https://github.com/eleme/ubt-web",
   "license": "MIT",
@@ -12,6 +12,5 @@
     "babel-loader": "5.3.2",
     "exports-loader": "0.6.2",
     "webpack": "1.12.11"
-  },
-  "dependencies": {}
+  }
 }
