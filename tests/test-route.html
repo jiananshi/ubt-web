@@ -2,16 +2,19 @@
 <script src="onsend.js"></script>
 
 <script>
+var minimalTimeToRead = 200;
+var gapTime = minimalTimeToRead + 100;
+
 setTimeout(function() {
   location.hash = '#demo';
-}, 1000);
+}, 1 * gapTime);
 setTimeout(function() {
   history.pushState({}, null, '/a');
   history.pushState({}, null, '/b');
-}, 2000);
+}, 2 * gapTime);
 setTimeout(function() {
   history.back();
-}, 3000);
+}, 3 * gapTime);
 
 var supposedEvents = [];
 var collectedPVEvents = [];
@@ -19,7 +22,7 @@ var collectedPVEvents = [];
 setTimeout(function() {
   console.log(collectedPVEvents);
   Tester.feedback(true);
-}, 4000);
+}, 4 * gapTime);
 
 window.onsend = function(data) {
   if (data.type === 'PV' && data.referrer != null) {
