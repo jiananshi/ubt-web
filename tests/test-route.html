@@ -1,0 +1,34 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+
+<script>
+var minimalTimeToRead = 200;
+var gapTime = minimalTimeToRead + 100;
+
+setTimeout(function() {
+  location.hash = '#demo';
+}, 1 * gapTime);
+setTimeout(function() {
+  history.pushState({}, null, '/a');
+  history.pushState({}, null, '/b');
+}, 2 * gapTime);
+setTimeout(function() {
+  history.back();
+}, 3 * gapTime);
+
+var supposedEvents = [];
+var collectedPVEvents = [];
+
+setTimeout(function() {
+  console.log(collectedPVEvents);
+  Tester.feedback(true);
+}, 4 * gapTime);
+
+window.onsend = function(data) {
+  if (data.type === 'PV' && data.referrer != null) {
+    collectedPVEvents.push(data);
+  }
+};
+</script>
+
+<script src="../ubt.min.js"></script>

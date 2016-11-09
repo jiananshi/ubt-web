@@ -28,15 +28,6 @@ npm install eleme-ubt --save
 <script src="/node_modules/eleme-ubt/ubt.min.js"></script>
 ```
 
-同时提供 Angular 版，`ubt-angular.min.js`
-
-```js
-angular.module('moduleName', [
-  // ... 其它依赖
-  'UBT'
-]);
-```
-
 ### Lv.1 事件监控需求
 
 ##### click 监控
@@ -96,7 +87,7 @@ angular.module('moduleName', [
 
 有时候产品会想出一些神奇的需求，这时候就需要定制。
 
-引入 `ubt.js` 后会再全局定义一个叫 UBT 的对象（注意：Angular 环境不会在全局注册，而是注册一个叫 UBT 的 module 和 factory）。
+引入 `ubt.js` 后会再全局定义一个叫 UBT 的对象。
 
 ###### API 描述
 
