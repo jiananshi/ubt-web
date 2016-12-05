@@ -11,7 +11,7 @@ node_modules: package.json
 	@npm install
 
 build: node_modules
-	@npm run build
+	@webpack -p
 
 tests/bower_components: tests/bower.json
 	@cd tests && bower install
