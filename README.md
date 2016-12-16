@@ -1,5 +1,7 @@
 # ELEME Web 产品通用 UBT JS SDK
 
+最新版本 `1.2.1`, 查看[更新记录和旧版本](changelog.md).
+
 ### Lv.0 基本需求（PV、UV、JSERROR、Performance）
 
 如果需求是「监控访问量」这种程度，则属于这个级别的需求。
