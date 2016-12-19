@@ -1,0 +1,60 @@
+<script src="bower_components/tester/tester.js"></script>
+<script src="onsend.js"></script>
+<script src="../ubt.min.js"></script>
+
+<div class="layer1" ubt-visit="demo" ubt-visit-key="x1">layer1</div>
+<div class="layer2" ubt-visit="demo" ubt-visit-key="x2">layer2</div>
+
+<script>
+var result = [];
+
+window.onsend = function(data) {
+  if (data.type !== 'EVENT') return;
+  result.push(data.params.message);
+};
+
+var layer1 = document.querySelector('.layer1');
+var layer2 = document.querySelector('.layer2');
+
+layer1.style.display = 'none';
+layer2.style.display = 'none';
+
+var expected = [
+  'started',
+  'layer1', // visit layer 1
+  'tick',
+  'layer2', // visit layer 2
+  'tick', // nothing happens after that
+  'tick'
+];
+
+var tasks = [
+  function() { result.push('started'); },
+  function() { layer1.style.display = 'block'; },
+  function() { result.push('tick'); },
+  function() { layer2.style.display = 'block'; },
+  function() { result.push('tick'); },
+  function() {
+    layer1.style.display = 'none';
+    layer2.style.display = 'none';
+  },
+  function() {
+    result.push('tick');
+    Tester.log(result);
+    Tester.feedback(JSON.stringify(result) === JSON.stringify(expected));
+  },
+];
+
+var runTask = function(taskList) {
+  if (taskList.length > 0) {
+    var task = taskList[0];
+    task();
+    setTimeout(function() {
+      runTask(taskList.slice(1));
+    }, 500);
+  }
+};
+
+runTask(tasks);
+
+</script>
