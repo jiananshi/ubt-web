@@ -13,12 +13,8 @@ node_modules: package.json
 build: node_modules
 	@webpack -p
 
-tests/bower_components: tests/bower.json
-	@cd tests && bower install
-
-test: build tests/bower_components
-	@python -m SimpleHTTPServer 3153 > /dev/null 2>&1 &
-	@open http://127.0.0.1:3153/tests
+test: build
+	@cd tests && ../node_modules/.bin/ui-tester-start .
 
 tag:
 	@\

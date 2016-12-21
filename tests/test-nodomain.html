@@ -2,9 +2,9 @@
 // 删除 document.domain
 Object.defineProperty(document, 'domain', { value: null });
 </script>
-<script src="bower_components/tester/tester.js"></script>
+<script src="/tester.js"></script>
 <script src="onsend.js"></script>
-<script src="../ubt.min.js"></script>
+<script src="ubt.min.js"></script>
 <script>
 window.onsend = function(data) {
   Tester.feedback(data.ssid === localStorage.getItem('ubt_ssid'));
