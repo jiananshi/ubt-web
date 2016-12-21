@@ -1,6 +1,6 @@
 # ELEME Web 产品通用 UBT JS SDK
 
-最新版本 `1.2.1`, 查看[更新记录和旧版本](changelog.md).
+最新版本 `1.2.2`, 查看[更新记录和旧版本](changelog.md).
 
 ### Lv.0 基本需求（PV、UV、JSERROR、Performance）
 

@@ -1,4 +1,10 @@
 
+### `1.2.2`
+
+https://github.elemecdn.com/eleme/ubt-web/1.2.2/ubt.min.js
+
+* 增加 visit-key 支持
+
 ### `1.2.1`
 
 https://github.elemecdn.com/eleme/ubt-web/1.2.1/ubt.min.js

@@ -1,6 +1,6 @@
 {
   "name": "eleme-ubt",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "index": "ubt.min.js",
   "scripts": {
     "prepublish": "webpack -p",
