@@ -1,8 +1,9 @@
+
 <script src="/tester.js"></script>
 <script src="onsend.js"></script>
 <script>
 window.onsend = function(data) {
-  if(data.type === 'PV') {
+  if (data.type === 'PV') {
     switch(false) {
       case 'ssid' in data:
       case 'pvhash' in data:
@@ -14,4 +15,3 @@ window.onsend = function(data) {
 };
 </script>
 <script src="ubt.min.js"></script>
-

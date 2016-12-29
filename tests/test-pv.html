@@ -5,24 +5,31 @@
 <script>
 setTimeout(function() {
   UBT.send('PV', { a: 1, b: 2 });
-}, 100);
+}, 500);
 setTimeout(function() {
   UBT.send('PV', { a: 1, b: 2 });
-}, 200);
+}, 600);
 
 var list = [];
+// default PV event is supposed to be sent first
+var gotDefaultPv = false;
 
 window.onsend = function(data) {
-  if(data.type === 'PV') {
+  if (data.type === 'PV') {
+    if (gotDefaultPv === false) {
+      gotDefaultPv = true;
+      return;
+    }
     switch(false) {
       case 'ssid' in data:
       case 'pvhash' in data:
       case data.a === 1:
       case data.b === 2:
       case data.pvhash.length === 32:
+        debugger
         return Tester.feedback(false);
     }
-    if(list.push(data) === 2) {
+    if (list.push(data) === 2) {
       switch(false) {
         case list[0].ssid === list[1].ssid:
         case list[0].pvhash !== list[1].pvhash:
