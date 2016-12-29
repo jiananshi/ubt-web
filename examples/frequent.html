@@ -1,0 +1,11 @@
+
+<script type="text/javascript" src="../ubt.min.js"></script>
+
+<script type="text/javascript">
+  window.UBT_DEBUG_BATCH = function(message) {
+    console.debug('Send batched events', message);
+  };
+  window.addEventListener('mousemove', function(event) {
+    UBT.send()
+  });
+</script>
