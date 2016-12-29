@@ -10,22 +10,17 @@
 
 下面提供两种常用的安装和引入方式：
 
-使用 bower
-
-```bash
-bower install eleme-ubt --save
-```
-
 ```html
 <script src="/bower_components/eleme-ubt/ubt.min.js"></script>
 ```
 
-使用 npm
+使用 npm 本地模块
 
 ```bash
 npm install eleme-ubt --save
+# or Yarn
+yarn add eleme-ubt
 ```
-
 ```html
 <script src="/node_modules/eleme-ubt/ubt.min.js"></script>
 ```
@@ -168,3 +163,19 @@ make test
 ```
 
 如果有功能的增加和调整，请同步相应的测试。
+
+开发当中可以覆盖 `UBT_DEBUG` 方法来打印事件:
+
+```js
+window.UBT_DEBUG = function(event) {
+  console.log(event);
+};
+```
+
+由于 UBT 加入了事件合并方案, 还可以单独针对合并后的数据进行调试:
+
+```js
+window.UBT_DEBUG_BATCH = function(message) {
+  console.log(message);
+};
+```
