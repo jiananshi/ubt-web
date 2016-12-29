@@ -163,19 +163,3 @@ make test
 ```
 
 如果有功能的增加和调整，请同步相应的测试。
-
-开发当中可以覆盖 `UBT_DEBUG` 方法来打印事件:
-
-```js
-window.UBT_DEBUG = function(event) {
-  console.log(event);
-};
-```
-
-由于 UBT 加入了事件合并方案, 还可以单独针对合并后的数据进行调试:
-
-```js
-window.UBT_DEBUG_BATCH = function(message) {
-  console.log(message);
-};
-```
