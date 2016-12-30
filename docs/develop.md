@@ -38,6 +38,17 @@ window.UBT_DEBUG_BATCH = function(message) {
 };
 ```
 
+Crayfish 配置可以 Mock 方便本地测试:
+
+```js
+window.UBT_DEBUG_CONFIG = {
+  concurrency: 3, // how many ajax requests to send message
+  interval: 1000, // interval of checking
+  queueSize: 100, // which will trigger a submit
+  timeout: 3000 // request request timeout
+};
+```
+
 ### 开发用例
 
 `examples/` 目录存放了很多开发过程和测试当中使用的 HTML 入口文件. 部分逻辑在 `tests/` 目录有设计测试, 某些复杂的副作用和时间相关的行为可以打开 HTML 手动查看.
