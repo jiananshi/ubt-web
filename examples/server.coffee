@@ -14,7 +14,9 @@ app = http.createServer (req, res) ->
   res.setHeader 'Access-Control-Allow-Headers', 'Content-Type'
   console.log '\nQuery:', queryData
   console.log '\nHeaders:', req.headers
-  res.end 'something'
+  setTimeout ->
+    res.end 'something'
+  , 0
 
 app.listen 3000
 console.log 'Listening on 3000.'
