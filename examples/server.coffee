@@ -15,8 +15,13 @@ app = http.createServer (req, res) ->
   console.log '\nQuery:', queryData
   console.log '\nHeaders:', req.headers
   setTimeout ->
-    res.end 'something'
-  , 0
+    if req.method is 'OPTIONS'
+      console.log 'OPTIONS should be fine'
+      res.end 'ok'
+    else
+      res.writeHead 200, {}
+      res.end 'something'
+  , 8000
 
 app.listen 3000
 console.log 'Listening on 3000.'
