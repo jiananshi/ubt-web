@@ -21,7 +21,7 @@ app = http.createServer (req, res) ->
     else
       res.writeHead 200, {}
       res.end 'something'
-  , 8000
+  , 8
 
 app.listen 3000
 console.log 'Listening on 3000.'
