@@ -8,8 +8,6 @@
 
 ```bash
 referer: location.href
-ssid: SSID_FORMAT
-pvhash: PVHASH_FORMAT
 data: [
   EVENT_FORMAT
 ]
@@ -20,13 +18,13 @@ data: [
 ```json
 {
   "referer": "https://h5.ele.me/sales/",
-  "ssid": "xxxxy7bnvq80e3pnot31vg4gr60txxxx_2016-12-26",
-  "pvhash": "xxxx1x466jfk59x3htv1kqjzhlmgxxxx",
   "data": [
     {
       "resolution": "1096x761",
       "location": "https://h5.ele.me/sales/",
+      "pvhash": "xxxx1x466jfk59x3htv1kqjzhlmgxxxx",
       "referrer": "https://h5.ele.me/discovery/",
+      "ssid": "xxxxy7bnvq80e3pnot31vg4gr60txxxx_2016-12-26",
       "type": "PV",
       "timestamp": "ix6asfi4"
     },
@@ -46,6 +44,7 @@ data: [
       "requestStart": 382,
       "responseEnd": 478,
       "responseStart": 477,
+      "ssid": "xxxxy7bnvq80e3pnot31vg4gr60txxxx_2016-12-26",
       "type": "TIMING",
       "timestamp": "ix6xi6az"
     },
@@ -53,6 +52,7 @@ data: [
       "type": "PARAMS",
       "user_id": 885996,
       "geohash": "",
+      "ssid": "xxxxy7bnvq80e3pnot31vg4gr60txxxx_2016-12-26",
       "timestamp": "ix6xi58y"
     },
     {
@@ -65,6 +65,7 @@ data: [
         "dish_id": "12222",
         "index": 0
       },
+      "ssid": "xxxxy7bnvq80e3pnot31vg4gr60txxxx_2016-12-26",
       "timestamp": "igw6zpqh"
     }
   ]
