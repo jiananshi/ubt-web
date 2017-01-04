@@ -7,7 +7,6 @@
 所有事件统一到这个格式. 合并后, 部分字段共用. 事件自身的数据以数组形式存放:
 
 ```bash
-referer: location.href
 data: [
   EVENT_FORMAT
 ]
@@ -17,7 +16,6 @@ data: [
 
 ```json
 {
-  "referer": "https://h5.ele.me/sales/",
   "data": [
     {
       "resolution": "1096x761",
