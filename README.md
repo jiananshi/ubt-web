@@ -1,6 +1,6 @@
 # ELEME Web 产品通用 UBT JS SDK
 
-最新版本 `1.2.2`, 查看[更新记录和旧版本](changelog.md).
+最新版本 `1.2.2`, 查看[更新记录和旧版本](docs/changelog.md).
 
 ### Lv.0 基本需求（PV、UV、JSERROR、Performance）
 
@@ -10,22 +10,17 @@
 
 下面提供两种常用的安装和引入方式：
 
-使用 bower
-
-```bash
-bower install eleme-ubt --save
-```
-
 ```html
 <script src="/bower_components/eleme-ubt/ubt.min.js"></script>
 ```
 
-使用 npm
+使用 npm 本地模块
 
 ```bash
 npm install eleme-ubt --save
+# or Yarn
+yarn add eleme-ubt
 ```
-
 ```html
 <script src="/node_modules/eleme-ubt/ubt.min.js"></script>
 ```

@@ -1,0 +1,73 @@
+
+<script src="/tester.js"></script>
+
+<script>
+window.UBT_DEBUG_CONFIG = {
+  concurrency: 10, // how many ajax requests to send message
+  interval: 200, // interval of checking
+  queueSize: 4, // which will trigger a submit
+  timeout: 200 // request request timeout
+};
+
+var logs = []
+
+window.UBT_DEBUG_BATCH = function(message) {
+  logs.push(message.data.map(function(x) {return x.type;}));
+};
+
+</script>
+
+<script src="ubt.min.js"></script>
+
+<script type="text/javascript">
+
+  /*
+    About the test case:
+
+    Side effects are hard to test and to be complete, so only a basic test.
+    In this example, 3 groups of events are emitted, 2 with delays.
+    Besides these events, PV and TIMING are sent too.
+    It's 12+2=14 events in total. They will be sent in 3 groups.
+    The counts should be [3,4,4,3] since grouped by time and buffer size.
+
+  */
+
+  for (var i = 0; i < 1; i++) {
+    UBT.send('demo' + i, {});
+    console.info('sent', 'demo' + i);
+  }
+
+  setTimeout(function() {
+    for (var i = 1; i < 9; i++) {
+      UBT.send('demo' + i, {});
+      console.info('sent', 'demo' + i);
+    }
+  }, 300)
+
+  setTimeout(function() {
+    for (var i = 9; i < 12; i++) {
+      UBT.send('demo' + i, {});
+      console.info('sent', 'demo' + i);
+    }
+  }, 500)
+
+  var stateTestEnd = false;
+  var tick = function() {
+    logs.push('tick');
+    if (!stateTestEnd) {
+      setTimeout(tick, 100);
+    }
+  }
+
+  tick();
+  setTimeout(function() {
+    stateTestEnd = true;
+    console.log(logs);
+    var result = logs.filter(function(point) {
+      return point !== 'tick';
+    }).map(function(point) {
+      return point.length;
+    });
+    Tester.feedback(JSON.stringify(result) === JSON.stringify([3,4,4,3]));
+  }, 1000);
+</script>

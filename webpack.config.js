@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    'ubt': './ubt/entry.js'
+    'ubt': './lib/entry.js'
   },
   output: {
     filename: '[name].min.js',
