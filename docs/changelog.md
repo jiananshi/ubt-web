@@ -1,4 +1,19 @@
 
+### `1.3.0`
+
+https://github.elemecdn.com/eleme/ubt-web/1.3.0/ubt.min.js
+
+Breaking changes:
+
+* 不再使用 GIF 格式发送统计数据, 切换到新的 POST API 发送
+* 同时数据先合并, 然后再发送
+* 代码启动时会先读取 Crayfish 的配置, 然后决定是否发送
+
+其他:
+
+* 文件结构调整
+* 文档更新. 新的发送信息的格式
+
 ### `1.2.2`
 
 https://github.elemecdn.com/eleme/ubt-web/1.2.2/ubt.min.js
