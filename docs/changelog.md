@@ -1,4 +1,10 @@
 
+### `1.3.1` pre-release
+
+https://github.elemecdn.com/eleme/ubt-web/1.3.1/ubt.min.js
+
+* 增加 `sort_id` 用于判断数据连续性
+
 ### `1.3.0`
 
 https://github.elemecdn.com/eleme/ubt-web/1.3.0/ubt.min.js
