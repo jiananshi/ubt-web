@@ -2,6 +2,11 @@
 <script src="/tester.js"></script>
 
 <script>
+
+// force using memory as the storage in UbtStorage
+// remove shared side-effects
+delete window.localStorage;
+
 window.UBT_DEBUG_CONFIG = {
   concurrency: 10, // how many ajax requests to send message
   interval: 200, // interval of checking

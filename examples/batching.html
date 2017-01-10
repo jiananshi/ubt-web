@@ -1,5 +1,18 @@
 
+<script type="text/javascript">
+  window.UBT_DEBUG_CONFIG = {
+    concurrency: 10, // how many ajax requests to send message
+    interval: 4000, // interval of checking
+    queueSize: 10, // which will trigger a submit
+    timeout: 200 // request request timeout
+  };
+  window.UBT_DEBUG_BATCH = function(event) {
+    console.log('Batch sending:', event);
+  };
+</script>
+
 <script type="text/javascript" src="../ubt.min.js"></script>
+
 
 <div style="height: 100px; background-color: gray;"
      ubt-visit="test-demo"

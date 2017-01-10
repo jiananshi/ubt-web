@@ -1,7 +1,11 @@
 
-<script type="text/javascript" src="../ubt.min.js"></script>
-
 <script type="text/javascript">
+  window.UBT_DEBUG_CONFIG = {
+    concurrency: 10, // how many ajax requests to send message
+    interval: 400, // interval of checking
+    queueSize: 20, // which will trigger a submit
+    timeout: 200 // request request timeout
+  };
   window.UBT_DEBUG_BATCH = function(message) {
     console.debug('Send batched events', message);
   };
@@ -9,3 +13,5 @@
     UBT.send()
   });
 </script>
+
+<script type="text/javascript" src="../ubt.min.js"></script>
