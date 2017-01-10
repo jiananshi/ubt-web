@@ -1,4 +1,10 @@
 
+### `1.3.2`
+
+https://github.elemecdn.com/eleme/ubt-web/1.3.2/ubt.min.js
+
+* 由于 `beforeunload` 事件不可靠, 页面通过 `localStorage` 共享统计事件队列.
+
 ### `1.3.1` pre-release
 
 https://github.elemecdn.com/eleme/ubt-web/1.3.1/ubt.min.js
