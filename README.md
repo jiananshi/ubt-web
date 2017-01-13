@@ -1,31 +1,18 @@
 # ELEME Web 产品通用 UBT JS SDK
 
-最新版本 https://github.elemecdn.com/eleme/ubt-web/1.3.2/ubt.min.js
+```html
+<script src="https://github.elemecdn.com/eleme/ubt-web/1.3.2/ubt.min.js"></script>
+```
 
 [更新记录和旧版本](docs/changelog.md).
+
+如果需要 npm 模块可以通过 `eleme-ubt` 下载。
 
 ### Lv.0 基本需求（PV、UV、JSERROR、Performance）
 
 如果需求是「监控访问量」这种程度，则属于这个级别的需求。
 
 这时只需要引入 `ubt.min.js` 即可，无需任何其它操作。
-
-下面提供两种常用的安装和引入方式：
-
-```html
-<script src="/bower_components/eleme-ubt/ubt.min.js"></script>
-```
-
-使用 npm 本地模块
-
-```bash
-npm install eleme-ubt --save
-# or Yarn
-yarn add eleme-ubt
-```
-```html
-<script src="/node_modules/eleme-ubt/ubt.min.js"></script>
-```
 
 ### Lv.1 事件监控需求
 
