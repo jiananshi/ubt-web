@@ -1,4 +1,10 @@
 
+### `1.3.3`
+
+https://github.elemecdn.com/eleme/ubt-web/1.3.3/ubt.min.js
+
+* 事件格式增加 `version` 字段, 以便排查区分数据.
+
 ### `1.3.2`
 
 https://github.elemecdn.com/eleme/ubt-web/1.3.2/ubt.min.js

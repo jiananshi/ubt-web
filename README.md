@@ -1,7 +1,7 @@
 # ELEME Web 产品通用 UBT JS SDK
 
 ```html
-<script src="https://github.elemecdn.com/eleme/ubt-web/1.3.2/ubt.min.js"></script>
+<script src="https://github.elemecdn.com/eleme/ubt-web/1.3.3/ubt.min.js"></script>
 ```
 
 [更新记录和旧版本](docs/changelog.md).
