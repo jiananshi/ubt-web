@@ -1,4 +1,10 @@
 
+### `1.3.4`
+
+https://github.elemecdn.com/eleme/ubt-web/1.3.4/ubt.min.js
+
+* 兼容 UBT Crayfish 配置由于特殊原因得到 `null` 的问题
+
 ### `1.3.3`
 
 https://github.elemecdn.com/eleme/ubt-web/1.3.3/ubt.min.js
