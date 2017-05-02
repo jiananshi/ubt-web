@@ -1,4 +1,9 @@
 
+Change log
+----
+
+新版的记录 https://github.com/eleme/ubt-web/releases
+
 ### `1.3.4`
 
 https://github.elemecdn.com/eleme/ubt-web/1.3.4/ubt.min.js
