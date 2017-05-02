@@ -1,0 +1,19 @@
+<script src="/tester.js"></script>
+<script src="onsend.js"></script>
+<script src="ubt.min.js"></script>
+
+<button ubt-click="233" ubt-data='{"a": "A"}' ubt-data-xxx="test">test</button>
+
+<script>
+window.onsend = function(data) {
+  if(data.type !== 'EVENT') return;
+  Tester.log(JSON.stringify(data.params));
+  Tester.feedback(data.params.xxx === 'test' && data.params.a === 'A');
+};
+
+var button = document.querySelector('button');
+
+setTimeout(function() {
+  button.click();
+});
+</script>

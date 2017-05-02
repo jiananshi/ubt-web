@@ -70,11 +70,13 @@
 
 ##### 事件参数补充
 
-有时候事件还需要补充一些额外的参数，这可以通过在元素上设置 ubt-data-* 属性来实现。
+有时候事件还需要补充一些额外的参数，这可以通过在元素上设置 `ubt-data-*` 属性来实现。
 
 ```html
 <button ubt-click="埋点 ID" ubt-data-username="阿饿君">点击这个按钮会带上 username 参数</button>
 ```
+
+或者可以使用简写 `ubt-data='{"key": "value"}'` 传递 JSON 作为基础的数据。
 
 ### Lv.2 定制需求
 
