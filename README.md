@@ -141,10 +141,17 @@ UBT.send('PV', {
 
 ## 开发
 
-本项目采用 webpack 打包，已配置 Makefile
+本项目采用 webpack 打包，已配置 Makefile:
 
 ```bash
 make build
+```
+
+打包之后可以运行 `examples/` 当中的网页查看 Demo 运行具体的内容(仅供开发测试):
+
+```bash
+# npm i -g http-server
+http-server -c-1 -i examples/
 ```
 
 项目中配置了各种测试，开发时请先跑通测试后再提交代码。
